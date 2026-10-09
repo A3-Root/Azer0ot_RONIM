@@ -39,6 +39,8 @@ GVAR(displayOverHud) = false;
 GVAR(calibProfile) = createHashMapFromArray (profileNamespace getVariable [QGVAR(calibration), []]);
 GVAR(calibSaveAt) = 0;
 GVAR(cam) = objNull;
+GVAR(camEye) = objNull;
+GVAR(eyePip) = false;
 
 // Sway and effect state. Offsets are fractions of screen height, [x, y, 0], y down.
 GVAR(swayPos) = [0, 0, 0];
@@ -89,5 +91,9 @@ private _category = localize LSTRING(kb_category);
     ["scaleUp", 78], ["scaleDown", 74], ["up", 72], ["down", 80],
     ["left", 75], ["right", 77], ["wider", 73], ["narrower", 71], ["reset", 76]
 ];
+
+// Screen metrics for diagnosing tube proportions from the RPT
+diag_log text format ["[RONIM] screen: resolution %1, safeZone %2, pixel %3, square width factor %4",
+    getResolution, [safeZoneX, safeZoneY, safeZoneW, safeZoneH], [pixelW, pixelH], pixelW / pixelH];
 
 [FUNC(tick), 0] call CBA_fnc_addPerFrameHandler;

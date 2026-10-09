@@ -37,9 +37,12 @@
 #define IDC_RETICLE 120
 #define IDC_GROUP 200
 #define IDC_PIP 201
+#define IDC_EYE_GROUP 210
+#define IDC_EYE_PIP 211
 
 // PiP render target, local to this client
 #define PIP_TARGET "azeroot_ronim_nv"
+#define PIP_TARGET_EYE "azeroot_ronim_eye"
 
 #define TUBE_NONE 0
 #define TUBE_MONO 1
@@ -48,6 +51,10 @@
 #define TUBE_NAMES ["none", "mono", "bino", "quad"]
 
 #define RETICLE_STYLES ["dot", "cross", "chevron", "mildot"]
+
+// Tube shape setting -> texture; ellipse and rectangle are circle and square stretched (shapeAspect)
+#define TUBE_SHAPES ["circle", "circle", "square", "square", "roundsquare", "triangle", "pentagon", "hexagon", "octagon"]
+#define SHAPE_STRETCHED [1, 3]
 
 #define RONIM_DEBUG (MSET(debugLog))
 #define RLOG(msg) if (RONIM_DEBUG) then { diag_log text format ["[RONIM] %1", msg] }

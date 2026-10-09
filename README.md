@@ -1,6 +1,6 @@
 # Azer0ot_RONIM
 
-![version](https://img.shields.io/badge/version-1.0.0.4-blue)
+![version](https://img.shields.io/badge/version-1.0.0.5-blue)
 [![build](https://github.com/A3-Root/Azer0ot_RONIM/actions/workflows/auto-release.yml/badge.svg?branch=master)](https://github.com/A3-Root/Azer0ot_RONIM/actions/workflows/auto-release.yml)
 
 **RONIM - Realistic Optic Nightvision Integration Mechanism** makes NVGs behave like real tubes, most of all when you aim through a magnified optic with them.
@@ -22,7 +22,7 @@ Authors: **Root, Azer0**. Requires **CBA**. **ACE** and **ZEN** are optional; RO
 
 ## Configuration
 
-- **CBA settings:** 82 settings under *Addon Options > RONIM - Optic Nightvision*. See [docs/SETTINGS.md](docs/SETTINGS.md).
+- **CBA settings:** 86 settings under *Addon Options > RONIM - Optic Nightvision*. See [docs/SETTINGS.md](docs/SETTINGS.md).
 - **Zeus (ZEN):** settings, feature toggles, exempt unit, break mount, re-seat mount, integrated optics. See [docs/MODULES.md](docs/MODULES.md).
 - **3DEN:** the *RONIM Settings* module, the *RONIM Exempt Units* module, and a unit attribute *RONIM: exempt*.
 - **API:** `azeroot_ronim_fnc_*` functions and CBA events. See [docs/API.md](docs/API.md).

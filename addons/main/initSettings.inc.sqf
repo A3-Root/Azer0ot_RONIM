@@ -21,6 +21,8 @@
 
 // ---------------------------------------------------------------- 02 Night Vision Picture (PiP)
 [QGVAR(pipEnabled), "CHECKBOX", [LSTRING(pipEnabled), LSTRING(pipEnabled_desc)], SUB_PIP, false, true] call CBA_fnc_addSetting;
+[QGVAR(pipBino), "CHECKBOX", [LSTRING(pipBino), LSTRING(pipBino_desc)], SUB_PIP, true, true] call CBA_fnc_addSetting;
+[QGVAR(pipMono), "CHECKBOX", [LSTRING(pipMono), LSTRING(pipMono_desc)], SUB_PIP, true, true] call CBA_fnc_addSetting;
 [QGVAR(pipResolution), "LIST", [LSTRING(pipResolution), LSTRING(pipResolution_desc)], SUB_PIP, [[512, 1024, 2048], [[LSTRING(pipResolution_opt0)], [LSTRING(pipResolution_opt1)], [LSTRING(pipResolution_opt2)]], 1], false] call CBA_fnc_addSetting;
 [QGVAR(pipForwardHip), "SLIDER", [LSTRING(pipForwardHip), LSTRING(pipForwardHip_desc)], SUB_PIP, [0, 0.6, 0.22, 2], true] call CBA_fnc_addSetting;
 [QGVAR(pipForwardAds), "SLIDER", [LSTRING(pipForwardAds), LSTRING(pipForwardAds_desc)], SUB_PIP, [0, 1.5, 0.5, 2], true] call CBA_fnc_addSetting;
@@ -29,13 +31,15 @@
 // ---------------------------------------------------------------- 03 Tube Mask and Sway
 [QGVAR(maskEnabled), "CHECKBOX", [LSTRING(maskEnabled), LSTRING(maskEnabled_desc)], SUB_MASK, true, true] call CBA_fnc_addSetting;
 [QGVAR(maskSource), "LIST", [LSTRING(maskSource), LSTRING(maskSource_desc)], SUB_MASK, [[0, 1, 2, 3], [[LSTRING(maskSource_opt0)], [LSTRING(maskSource_opt1)], [LSTRING(maskSource_opt2)], [LSTRING(maskSource_opt3)]], 0], true] call CBA_fnc_addSetting;
+[QGVAR(tubeShape), "LIST", [LSTRING(tubeShape), LSTRING(tubeShape_desc)], SUB_MASK, [[0, 1, 2, 3, 4, 5, 6, 7, 8], [[LSTRING(tubeShape_opt0)], [LSTRING(tubeShape_opt1)], [LSTRING(tubeShape_opt2)], [LSTRING(tubeShape_opt3)], [LSTRING(tubeShape_opt4)], [LSTRING(tubeShape_opt5)], [LSTRING(tubeShape_opt6)], [LSTRING(tubeShape_opt7)], [LSTRING(tubeShape_opt8)]], 0], true] call CBA_fnc_addSetting;
+[QGVAR(shapeAspect), "SLIDER", [LSTRING(shapeAspect), LSTRING(shapeAspect_desc)], SUB_MASK, [0.4, 2.5, 1.4, 2], true] call CBA_fnc_addSetting;
 [QGVAR(monoCustomMask), "CHECKBOX", [LSTRING(monoCustomMask), LSTRING(monoCustomMask_desc)], SUB_MASK, true, true] call CBA_fnc_addSetting;
 [QGVAR(opticModelScale), "SLIDER", [LSTRING(opticModelScale), LSTRING(opticModelScale_desc)], SUB_MASK, [2, 60, 19.41, 2], true] call CBA_fnc_addSetting;
 [QGVAR(maskOverHud), "CHECKBOX", [LSTRING(maskOverHud), LSTRING(maskOverHud_desc)], SUB_MASK, true, false] call CBA_fnc_addSetting;
 [QGVAR(maskOpacity), "SLIDER", [LSTRING(maskOpacity), LSTRING(maskOpacity_desc)], SUB_MASK, [0.5, 1, 1, 2, true], false] call CBA_fnc_addSetting;
 [QGVAR(maskScale), "SLIDER", [LSTRING(maskScale), LSTRING(maskScale_desc)], SUB_MASK, [0.6, 1.6, 1, 2], false] call CBA_fnc_addSetting;
 [QGVAR(monoSide), "LIST", [LSTRING(monoSide), LSTRING(monoSide_desc)], SUB_MASK, [[0, 1], [[LSTRING(monoSide_opt0)], [LSTRING(monoSide_opt1)]], 1], true] call CBA_fnc_addSetting;
-[QGVAR(monoOtherEye), "LIST", [LSTRING(monoOtherEye), LSTRING(monoOtherEye_desc)], SUB_MASK, [[0, 1], [[LSTRING(monoOtherEye_opt0)], [LSTRING(monoOtherEye_opt1)]], 1], true] call CBA_fnc_addSetting;
+[QGVAR(monoOtherEye), "LIST", [LSTRING(monoOtherEye), LSTRING(monoOtherEye_desc)], SUB_MASK, [[0, 1, 2], [[LSTRING(monoOtherEye_opt0)], [LSTRING(monoOtherEye_opt1)], [LSTRING(monoOtherEye_opt2)]], 0], true] call CBA_fnc_addSetting;
 [QGVAR(monoShift), "SLIDER", [LSTRING(monoShift), LSTRING(monoShift_desc)], SUB_MASK, [0, 0.4, 0.25, 2], true] call CBA_fnc_addSetting;
 [QGVAR(swayEnabled), "CHECKBOX", [LSTRING(swayEnabled), LSTRING(swayEnabled_desc)], SUB_MASK, true, true] call CBA_fnc_addSetting;
 [QGVAR(swayStrength), "SLIDER", [LSTRING(swayStrength), LSTRING(swayStrength_desc)], SUB_MASK, [0, 6, 1.6, 2], true] call CBA_fnc_addSetting;
@@ -123,19 +127,23 @@ GVAR(settingMeta) = createHashMapFromArray [
     ["magThreshold", ["SLIDER", 1, 8, 2, false]],
     ["autoDetectIntegrated", ["CHECKBOX"]],
     ["pipEnabled", ["CHECKBOX"]],
+    ["pipBino", ["CHECKBOX"]],
+    ["pipMono", ["CHECKBOX"]],
     ["pipResolution", ["LIST", [512, 1024, 2048], [LSTRING(pipResolution_opt0), LSTRING(pipResolution_opt1), LSTRING(pipResolution_opt2)]]],
     ["pipForwardHip", ["SLIDER", 0, 0.6, 2, false]],
     ["pipForwardAds", ["SLIDER", 0, 1.5, 2, false]],
     ["pipFovScale", ["SLIDER", 0.8, 1.25, 3, false]],
     ["maskEnabled", ["CHECKBOX"]],
     ["maskSource", ["LIST", [0, 1, 2, 3], [LSTRING(maskSource_opt0), LSTRING(maskSource_opt1), LSTRING(maskSource_opt2), LSTRING(maskSource_opt3)]]],
+    ["tubeShape", ["LIST", [0, 1, 2, 3, 4, 5, 6, 7, 8], [LSTRING(tubeShape_opt0), LSTRING(tubeShape_opt1), LSTRING(tubeShape_opt2), LSTRING(tubeShape_opt3), LSTRING(tubeShape_opt4), LSTRING(tubeShape_opt5), LSTRING(tubeShape_opt6), LSTRING(tubeShape_opt7), LSTRING(tubeShape_opt8)]]],
+    ["shapeAspect", ["SLIDER", 0.4, 2.5, 2, false]],
     ["monoCustomMask", ["CHECKBOX"]],
     ["opticModelScale", ["SLIDER", 2, 60, 2, false]],
     ["maskOverHud", ["CHECKBOX"]],
     ["maskOpacity", ["SLIDER", 0.5, 1, 2, true]],
     ["maskScale", ["SLIDER", 0.6, 1.6, 2, false]],
     ["monoSide", ["LIST", [0, 1], [LSTRING(monoSide_opt0), LSTRING(monoSide_opt1)]]],
-    ["monoOtherEye", ["LIST", [0, 1], [LSTRING(monoOtherEye_opt0), LSTRING(monoOtherEye_opt1)]]],
+    ["monoOtherEye", ["LIST", [0, 1, 2], [LSTRING(monoOtherEye_opt0), LSTRING(monoOtherEye_opt1), LSTRING(monoOtherEye_opt2)]]],
     ["monoShift", ["SLIDER", 0, 0.4, 2, false]],
     ["swayEnabled", ["CHECKBOX"]],
     ["swayStrength", ["SLIDER", 0, 6, 2, false]],
@@ -205,8 +213,8 @@ GVAR(settingMeta) = createHashMapFromArray [
 // Settings groups for the Zeus settings module: [title key, [names]]
 GVAR(settingGroups) = [
     [LSTRING(cat_general), ["enabled", "allowVehicles", "magThreshold", "autoDetectIntegrated"]],
-    [LSTRING(cat_pip), ["pipEnabled", "pipResolution", "pipForwardHip", "pipForwardAds", "pipFovScale"]],
-    [LSTRING(cat_mask), ["maskEnabled", "maskSource", "monoCustomMask", "opticModelScale", "maskOverHud", "maskOpacity", "maskScale", "monoSide", "monoOtherEye", "monoShift", "swayEnabled", "swayStrength", "swayLook", "swayMove", "swayIdle", "swayFatigue", "swayStiffness", "swayDamping", "swayMaxOffset", "aceMaskMode"]],
+    [LSTRING(cat_pip), ["pipEnabled", "pipBino", "pipMono", "pipResolution", "pipForwardHip", "pipForwardAds", "pipFovScale"]],
+    [LSTRING(cat_mask), ["maskEnabled", "maskSource", "tubeShape", "shapeAspect", "monoCustomMask", "opticModelScale", "maskOverHud", "maskOpacity", "maskScale", "monoSide", "monoOtherEye", "monoShift", "swayEnabled", "swayStrength", "swayLook", "swayMove", "swayIdle", "swayFatigue", "swayStiffness", "swayDamping", "swayMaxOffset", "aceMaskMode"]],
     [LSTRING(cat_ads), ["adsSwayEnabled", "adsSwayStrength", "recoilKick", "recoilCamShake", "adsAimMult", "misalignEnabled", "misalignChance", "misalignStep", "misalignMax", "misalignToggleReset", "misalignAutoRecover", "misalignRecoverDelay", "misalignRecoverTime", "reseatAction", "reseatTime"]],
     [LSTRING(cat_mount), ["mountEnabled", "mountChance", "mountRecoilScale", "mountNotify"]],
     [LSTRING(cat_bruise), ["bruiseEnabled", "bruiseChance", "bruiseDamage", "bruiseCooldown", "bruiseRecoilScale"]],

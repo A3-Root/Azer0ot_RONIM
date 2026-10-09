@@ -1,6 +1,7 @@
-// NVG overlay, drawn under the HUD. Draw order = control order: fillers, tube group, reticle.
+// NVG overlay. Draw order = control order: other-eye group, fillers, tube group, reticle.
 // The tube group clips its children to the tube box: the PiP night vision picture (full screen
 // size, shifted inside the group by sway), the tube flash and the mask texture on top.
+// The other-eye group holds a PiP normal view for a monocular's naked eye (optional).
 // Every position is set per frame by fnc_maskUpdate.
 class RscText;
 class RscPicture;
@@ -17,6 +18,23 @@ class RscTitles {
         onUnload = QUOTE(uiNamespace setVariable [ARR_2(QQGVAR(display),displayNull)]);
 
         class controls {
+            class Eye: RscControlsGroupNoScrollbars {
+                idc = IDC_EYE_GROUP;
+                x = 0;
+                y = 0;
+                w = 0;
+                h = 0;
+                class controls {
+                    class EyePip: RscPicture {
+                        idc = IDC_EYE_PIP;
+                        x = 0;
+                        y = 0;
+                        w = 0;
+                        h = 0;
+                        text = "";
+                    };
+                };
+            };
             class FillTop: RscText {
                 idc = IDC_FILL_TOP;
                 x = 0;

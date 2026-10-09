@@ -19,7 +19,9 @@ Runtime overrides from the Zeus/3DEN **RONIM Settings** modules or `azeroot_roni
 
 | Setting | Name | Default | Range / options | What it does |
 |---|---|---|---|---|
-| PiP night vision | `pipEnabled` | off |  | In first person, RONIM renders the night vision itself in a picture-in-picture view inside the tubes and keeps the game's own NVG mode off (no vanilla/ACE tube overlay). A monocular leaves the other eye with the real view. Needs PiP enabled in video options. Third person and disabled PiP fall back to the game's NVG mode. Off = the game's NVG mode with RONIM's tube overlay drawn in front of it. |
+| Allow PiP | `pipEnabled` | off |  | Master switch for every picture-in-picture option below. Off = no PiP at all: the game's NVG mode with RONIM's tube overlay in front of it. PiP needs PiP enabled in video options and only works in first person. |
+| PiP night vision: binocular / quad | `pipBino` | on |  | Binocular and panoramic NVGs: RONIM renders the night vision itself inside the tubes and keeps the game's NVG mode off. Off = the game's NVG mode for these NVGs. Note: IR lasers, strobes and IR lights are only drawn by the game's NVG mode. |
+| PiP night vision: monocular tube | `pipMono` | on |  | Monocular NVGs: RONIM renders the night vision itself inside the tube and keeps the game's NVG mode off, so the other eye can see the real view. Off = the game's NVG mode for monoculars. |
 | PiP resolution *(per player)* | `pipResolution` | 1024 | 512 / 1024 / 2048 | Render resolution of the night vision picture. Higher = sharper, costs more FPS. |
 | Camera offset (hip) | `pipForwardHip` | 0.22 | 0 - 0.6 | Metres the night vision camera sits ahead of your eye when not aiming, so it does not see the inside of the goggles or helmet. |
 | Camera offset (aiming) | `pipForwardAds` | 0.5 | 0 - 1.5 | Metres the night vision camera sits ahead of the optic while aiming, past the scope body. |
@@ -31,13 +33,15 @@ Runtime overrides from the Zeus/3DEN **RONIM Settings** modules or `azeroot_roni
 |---|---|---|---|---|
 | Draw NVG tube mask | `maskEnabled` | on |  | Black out everything outside the NVG tube(s) while NVGs are on. Off = full screen night vision. |
 | Tube shape source | `maskSource` | Auto | Auto / NVG optic texture / ACE border texture / RONIM generic | Where the tube mask's shape comes from. Auto: the NVG's own optic overlay texture (from RONIM's NVG compat addons or found next to its modelOptics), else its ACE border texture, else RONIM's. Size and position per NVG come from Classes > Mask calibration and the calibration keybinds. |
+| Tube shape | `tubeShape` | Circle | Circle / Ellipse / Square / Rectangle / Rounded square / Triangle / Pentagon / Hexagon / Octagon | Shape of RONIM's own tube masks: the custom monocular mask and the masks used when an NVG has no overlay of its own. Ellipse and rectangle use Shape width. |
+| Shape width | `shapeAspect` | 1.4 | 0.4 - 2.5 | Width / height of the Ellipse and Rectangle tube shapes. 1 = round / square, 1.5 = half again as wide, 0.7 = taller than wide. |
 | Custom monocular mask | `monoCustomMask` | on |  | Monocular NVGs always use RONIM's monocular mask: one tube in front of the chosen eye, the rest dark, whatever the NVG's own overlay looks like. |
 | Optic overlay scale | `opticModelScale` | 19.41 | 2 - 60 | Screen heights per optic model unit, used to size NVG overlays from their real model geometry (NVG compat addons). Calibrate one NVG, then every NVG overlay is sized correctly relative to it. The calibration hint shows the value. |
 | Mask in front *(per player)* | `maskOverHud` | on |  | Draw the tube overlay over the HUD layer, in front of the NVG's own optic overlay. Covers HUD elements in the blacked out area while NVGs are on. Off = under the HUD. |
 | Mask opacity *(per player)* | `maskOpacity` | 100% | 50-100% | How dark the area outside the tubes is. Lower = you can see a little around the tubes. |
 | Tube size *(per player)* | `maskScale` | 1 | 0.6 - 1.6 | Size of the tube view. Higher = larger tubes, less blacked out. |
 | Monocular eye | `monoSide` | Right eye | Left eye / Right eye | Which eye a monocular NVG sits in front of. |
-| Monocular other eye | `monoOtherEye` | Real view (PiP) | Dark / Real view (PiP) | What the eye without the tube sees. Real view needs PiP night vision; in the game's NVG mode the other eye is always dark. |
+| Monocular other eye | `monoOtherEye` | Dark | Dark / Real view (PiP tube) / PiP normal view (game NV tube) | What the eye without the tube sees. Real view: the game's normal view, needs the PiP monocular tube. PiP normal view: keeps the game's NVG mode in the tube (IR visible) and shows a PiP normal view to the other eye. Both PiP options need Allow PiP; otherwise the other eye is dark. |
 | Monocular tube shift | `monoShift` | 0.25 | 0 - 0.4 | How far a monocular tube sits off centre, as a fraction of screen width. 0 = centred. |
 | Tube sway | `swayEnabled` | on |  | The tube view lags and bobs with head movement, walking and fatigue. Off = tube fixed to the screen centre. |
 | Sway strength | `swayStrength` | 1.6 | 0 - 6 | Overall multiplier for all tube sway. 2.0 = twice the movement, 0.5 = half. |

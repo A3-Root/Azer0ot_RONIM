@@ -1,5 +1,29 @@
 # Changelog
 
+## Test Round 6 (v1.0.0.6)
+
+### Added
+- Tube shapes: circle, ellipse, square, rectangle, rounded square, triangle, pentagon, hexagon, octagon (+ shape width)
+- PiP split: master switch, PiP tube for binocular/quad, PiP tube for monoculars
+- Monocular other eye: dark, real view (PiP tube) or PiP normal view with the game's NVG tube (IR stays visible)
+
+### Removed
+- N/A
+
+### Changed
+- PiP master switch renamed Allow PiP (still off by default)
+
+## Test Round 5 (v1.0.0.5)
+
+### Added
+- Screen metrics logged to RPT at start
+
+### Removed
+- N/A
+
+### Changed
+- Tube/reticle proportions use the engine pixel size (fixes oval monocular tube)
+
 ## Test Round 4 (v1.0.0.4)
 
 ### Added

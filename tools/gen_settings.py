@@ -70,11 +70,16 @@ check("autoDetectIntegrated", "Auto-detect integrated NV optics", tip(
 
 # ======================================================================= 02 Night vision picture
 cat("pip", "Night Vision Picture (PiP)")
-check("pipEnabled", "PiP night vision", tip(
-    "In first person, RONIM renders the night vision itself in a picture-in-picture view inside the tubes and keeps",
-    "the game's own NVG mode off (no vanilla/ACE tube overlay). A monocular leaves the other eye with the real view.",
-    "Needs PiP enabled in video options. Third person and disabled PiP fall back to the game's NVG mode.",
-    "Off = the game's NVG mode with RONIM's tube overlay drawn in front of it."), False)
+check("pipEnabled", "Allow PiP", tip(
+    "Master switch for every picture-in-picture option below. Off = no PiP at all: the game's NVG mode with",
+    "RONIM's tube overlay in front of it. PiP needs PiP enabled in video options and only works in first person."), False)
+check("pipBino", "PiP night vision: binocular / quad", tip(
+    "Binocular and panoramic NVGs: RONIM renders the night vision itself inside the tubes and keeps the game's",
+    "NVG mode off. Off = the game's NVG mode for these NVGs.",
+    "Note: IR lasers, strobes and IR lights are only drawn by the game's NVG mode."), True)
+check("pipMono", "PiP night vision: monocular tube", tip(
+    "Monocular NVGs: RONIM renders the night vision itself inside the tube and keeps the game's NVG mode off,",
+    "so the other eye can see the real view. Off = the game's NVG mode for monoculars."), True)
 lst("pipResolution", "PiP resolution", tip(
     "Render resolution of the night vision picture.",
     "Higher = sharper, costs more FPS."), [512, 1024, 2048], [("512", ""), ("1024", ""), ("2048", "")], 1, glob=False)
@@ -98,6 +103,15 @@ lst("maskSource", "Tube shape source", tip(
     "else its ACE border texture, else RONIM's.",
     "Size and position per NVG come from Classes > Mask calibration and the calibration keybinds."),
     [0, 1, 2, 3], [("Auto", ""), ("NVG optic texture", ""), ("ACE border texture", ""), ("RONIM generic", "")], 0)
+lst("tubeShape", "Tube shape", tip(
+    "Shape of RONIM's own tube masks: the custom monocular mask and the masks used when an NVG has no overlay",
+    "of its own. Ellipse and rectangle use Shape width."),
+    [0, 1, 2, 3, 4, 5, 6, 7, 8],
+    [("Circle", ""), ("Ellipse", ""), ("Square", ""), ("Rectangle", ""), ("Rounded square", ""),
+     ("Triangle", ""), ("Pentagon", ""), ("Hexagon", ""), ("Octagon", "")], 0)
+slider("shapeAspect", "Shape width", tip(
+    "Width / height of the Ellipse and Rectangle tube shapes.",
+    "1 = round / square, 1.5 = half again as wide, 0.7 = taller than wide."), 0.4, 2.5, 1.4, 2)
 check("monoCustomMask", "Custom monocular mask", tip(
     "Monocular NVGs always use RONIM's monocular mask: one tube in front of the chosen eye, the rest dark,",
     "whatever the NVG's own overlay looks like."), True)
@@ -119,8 +133,10 @@ lst("monoSide", "Monocular eye", tip(
     [0, 1], [("Left eye", ""), ("Right eye", "")], 1)
 lst("monoOtherEye", "Monocular other eye", tip(
     "What the eye without the tube sees.",
-    "Real view needs PiP night vision; in the game's NVG mode the other eye is always dark."),
-    [0, 1], [("Dark", ""), ("Real view (PiP)", "")], 1)
+    "Real view: the game's normal view, needs the PiP monocular tube.",
+    "PiP normal view: keeps the game's NVG mode in the tube (IR visible) and shows a PiP normal view to the other eye.",
+    "Both PiP options need Allow PiP; otherwise the other eye is dark."),
+    [0, 1, 2], [("Dark", ""), ("Real view (PiP tube)", ""), ("PiP normal view (game NV tube)", "")], 0)
 slider("monoShift", "Monocular tube shift", tip(
     "How far a monocular tube sits off centre, as a fraction of screen width.",
     "0 = centred."), 0.0, 0.4, 0.25, 2)
@@ -348,7 +364,7 @@ EXTRA = {
 
 FEATURES = [
     ("enabled", "RONIM (all)"),
-    ("pipEnabled", "PiP night vision"),
+    ("pipEnabled", "PiP (all)"),
     ("maskEnabled", "Tube mask"),
     ("swayEnabled", "Tube sway"),
     ("adsSwayEnabled", "ADS sway"),

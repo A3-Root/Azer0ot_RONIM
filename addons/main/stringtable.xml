@@ -185,7 +185,7 @@
             <English>Mount failure</English>
         </Key>
         <Key ID="STR_azeroot_ronim_main_feature_pipEnabled">
-            <English>PiP night vision</English>
+            <English>PiP (all)</English>
         </Key>
         <Key ID="STR_azeroot_ronim_main_feature_reticleEnabled">
             <English>Reticle</English>
@@ -401,13 +401,16 @@
             <English>Monocular other eye</English>
         </Key>
         <Key ID="STR_azeroot_ronim_main_monoOtherEye_desc">
-            <English>What the eye without the tube sees.\nReal view needs PiP night vision; in the game's NVG mode the other eye is always dark.</English>
+            <English>What the eye without the tube sees.\nReal view: the game's normal view, needs the PiP monocular tube.\nPiP normal view: keeps the game's NVG mode in the tube (IR visible) and shows a PiP normal view to the other eye.\nBoth PiP options need Allow PiP; otherwise the other eye is dark.</English>
         </Key>
         <Key ID="STR_azeroot_ronim_main_monoOtherEye_opt0">
             <English>Dark</English>
         </Key>
         <Key ID="STR_azeroot_ronim_main_monoOtherEye_opt1">
-            <English>Real view (PiP)</English>
+            <English>Real view (PiP tube)</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_monoOtherEye_opt2">
+            <English>PiP normal view (game NV tube)</English>
         </Key>
         <Key ID="STR_azeroot_ronim_main_monoShift">
             <English>Monocular tube shift</English>
@@ -547,11 +550,17 @@
         <Key ID="STR_azeroot_ronim_main_pickCategory">
             <English>Settings group</English>
         </Key>
+        <Key ID="STR_azeroot_ronim_main_pipBino">
+            <English>PiP night vision: binocular / quad</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_pipBino_desc">
+            <English>Binocular and panoramic NVGs: RONIM renders the night vision itself inside the tubes and keeps the game's\nNVG mode off. Off = the game's NVG mode for these NVGs.\nNote: IR lasers, strobes and IR lights are only drawn by the game's NVG mode.</English>
+        </Key>
         <Key ID="STR_azeroot_ronim_main_pipEnabled">
-            <English>PiP night vision</English>
+            <English>Allow PiP</English>
         </Key>
         <Key ID="STR_azeroot_ronim_main_pipEnabled_desc">
-            <English>In first person, RONIM renders the night vision itself in a picture-in-picture view inside the tubes and keeps\nthe game's own NVG mode off (no vanilla/ACE tube overlay). A monocular leaves the other eye with the real view.\nNeeds PiP enabled in video options. Third person and disabled PiP fall back to the game's NVG mode.\nOff = the game's NVG mode with RONIM's tube overlay drawn in front of it.</English>
+            <English>Master switch for every picture-in-picture option below. Off = no PiP at all: the game's NVG mode with\nRONIM's tube overlay in front of it. PiP needs PiP enabled in video options and only works in first person.</English>
         </Key>
         <Key ID="STR_azeroot_ronim_main_pipForwardAds">
             <English>Camera offset (aiming)</English>
@@ -570,6 +579,12 @@
         </Key>
         <Key ID="STR_azeroot_ronim_main_pipFovScale_desc">
             <English>Fine-tunes the night vision picture's field of view against the real view.\nAbove 1 = wider, below 1 = narrower.</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_pipMono">
+            <English>PiP night vision: monocular tube</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_pipMono_desc">
+            <English>Monocular NVGs: RONIM renders the night vision itself inside the tube and keeps the game's NVG mode off,\nso the other eye can see the real view. Off = the game's NVG mode for monoculars.</English>
         </Key>
         <Key ID="STR_azeroot_ronim_main_pipResolution">
             <English>PiP resolution</English>
@@ -691,6 +706,12 @@
         <Key ID="STR_azeroot_ronim_main_reticleStyle_opt3">
             <English>Mil-dot</English>
         </Key>
+        <Key ID="STR_azeroot_ronim_main_shapeAspect">
+            <English>Shape width</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_shapeAspect_desc">
+            <English>Width / height of the Ellipse and Rectangle tube shapes.\n1 = round / square, 1.5 = half again as wide, 0.7 = taller than wide.</English>
+        </Key>
         <Key ID="STR_azeroot_ronim_main_suppressorAudible">
             <English>Suppressor detection</English>
         </Key>
@@ -762,6 +783,39 @@
         </Key>
         <Key ID="STR_azeroot_ronim_main_swayStrength_desc">
             <English>Overall multiplier for all tube sway.\n2.0 = twice the movement, 0.5 = half.</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_tubeShape">
+            <English>Tube shape</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_tubeShape_desc">
+            <English>Shape of RONIM's own tube masks: the custom monocular mask and the masks used when an NVG has no overlay\nof its own. Ellipse and rectangle use Shape width.</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_tubeShape_opt0">
+            <English>Circle</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_tubeShape_opt1">
+            <English>Ellipse</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_tubeShape_opt2">
+            <English>Square</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_tubeShape_opt3">
+            <English>Rectangle</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_tubeShape_opt4">
+            <English>Rounded square</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_tubeShape_opt5">
+            <English>Triangle</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_tubeShape_opt6">
+            <English>Pentagon</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_tubeShape_opt7">
+            <English>Hexagon</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_tubeShape_opt8">
+            <English>Octagon</English>
         </Key>
         <Key ID="STR_azeroot_ronim_main_zeus_breakMount">
             <English>Break NVG Mount</English>

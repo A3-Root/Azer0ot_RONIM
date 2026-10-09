@@ -39,8 +39,8 @@ if (isNull _display) exitWith {};
 private _pip = GVAR(pipActive);
 private _tube = GVAR(tube);
 private _mono = _tube == TUBE_MONO;
-private _aspect = getResolution select 4;
-private _unitX = (safeZoneW / safeZoneH) / _aspect; // UI width per UI height for square pixels
+// UI width per UI height for square on-screen proportions, from the engine's own pixel size
+private _unitX = pixelW / pixelH;
 private _cx = safeZoneX + safeZoneW / 2;
 private _cy = safeZoneY + safeZoneH / 2;
 private _pos = GVAR(swayPos);
@@ -73,7 +73,10 @@ if (_drawMask) then {
             _w = 0.75 * _h * _calStretch;
         };
         case "optic": { _w = _h * _unitX * _texAspect * _calStretch; };
-        default { _w = ([2, 1] select _mono) * _h * _unitX * _calStretch; };
+        default {
+            private _shapeStretch = [1, MSET(shapeAspect)] select (MSET(tubeShape) in SHAPE_STRETCHED);
+            _w = ([2, 1] select _mono) * _h * _unitX * _calStretch * _shapeStretch;
+        };
     };
     private _mx = _cx + _dx + _calX * safeZoneW;
     if (_mono) then {
@@ -93,8 +96,36 @@ _box params ["_x0", "_y0", "_w0", "_h0"];
 _group ctrlSetPosition _box;
 _group ctrlCommit 0;
 
-// Fillers: everything outside the box. A PiP monocular can leave the other eye with the real view.
-if (_drawMask && {!(_pip && _mono && MSET(monoOtherEye) == 1)}) then {
+// Other eye of a monocular: real view (PiP tube) or a PiP normal view (game NV tube) on the side
+// without the tube, from the screen edge to the tube box. Its filler is left out.
+private _otherEye = [0, MSET(monoOtherEye)] select (_drawMask && _mono);
+if (_otherEye == 1 && !_pip) then { _otherEye = 0; };
+if (_otherEye == 2 && !GVAR(eyePip)) then { _otherEye = [0, 1] select _pip; };
+private _tubeRight = MSET(monoSide) == 1;
+
+private _eyeGroup = _display displayCtrl IDC_EYE_GROUP;
+private _eyePicture = _eyeGroup controlsGroupCtrl IDC_EYE_PIP;
+if (_otherEye == 2) then {
+    private _eyeBox = if (_tubeRight) then {
+        [safeZoneXAbs, safeZoneY, (_x0 - safeZoneXAbs) max 0, safeZoneH]
+    } else {
+        [_x0 + _w0, safeZoneY, (safeZoneXAbs + safeZoneWAbs - _x0 - _w0) max 0, safeZoneH]
+    };
+    _eyeGroup ctrlSetPosition _eyeBox;
+    _eyeGroup ctrlShow true;
+    _eyeGroup ctrlCommit 0;
+    private _tex = format ["#(argb,%1,%1,1)r2t(%2,1.0)", MSET(pipResolution), PIP_TARGET_EYE];
+    if (ctrlText _eyePicture != _tex) then { _eyePicture ctrlSetText _tex; };
+    // The naked eye does not sway with the goggles: screen aligned
+    _eyePicture ctrlSetPosition [safeZoneX - (_eyeBox select 0), safeZoneY - (_eyeBox select 1), safeZoneW, safeZoneH];
+    _eyePicture ctrlShow true;
+    _eyePicture ctrlCommit 0;
+} else {
+    _eyeGroup ctrlShow false;
+};
+
+// Fillers: everything outside the box, except where the other eye sees the real or PiP view
+if (_drawMask && _otherEye != 1) then {
     _fillers params ["_top", "_bottom", "_left", "_right"];
     private _big = 4;
     _top ctrlSetPosition [safeZoneXAbs - _big, _y0 - _big, safeZoneWAbs + 2 * _big, _big + 0.001];
@@ -102,10 +133,24 @@ if (_drawMask && {!(_pip && _mono && MSET(monoOtherEye) == 1)}) then {
     _left ctrlSetPosition [_x0 - _big, _y0, _big + 0.001, _h0];
     _right ctrlSetPosition [_x0 + _w0 - 0.001, _y0, _big, _h0];
     private _fade = 1 - MSET(maskOpacity);
+    // Tube on the right leaves the left filler out (the eye picture is there), and vice versa
+    private _skip = [objNull, [_right, _left] select _tubeRight] select (_otherEye == 2);
+    // The other-eye picture spans the full height on its side, so the top/bottom fillers stop at it
+    if (_otherEye == 2) then {
+        // Tube on the right: from the tube box to the right edge; tube on the left: left edge to the box
+        private _keepX = [safeZoneXAbs - _big, _x0] select _tubeRight;
+        private _keepW = [_x0 + _w0 - safeZoneXAbs + _big, safeZoneXAbs + safeZoneWAbs + _big - _x0] select _tubeRight;
+        _top ctrlSetPosition [_keepX, _y0 - _big, _keepW, _big + 0.001];
+        _bottom ctrlSetPosition [_keepX, _y0 + _h0 - 0.001, _keepW, _big];
+    };
     {
-        _x ctrlSetFade _fade;
-        _x ctrlShow true;
-        _x ctrlCommit 0;
+        if (_x isEqualTo _skip) then {
+            _x ctrlShow false;
+        } else {
+            _x ctrlSetFade _fade;
+            _x ctrlShow true;
+            _x ctrlCommit 0;
+        };
     } forEach _fillers;
 } else {
     { _x ctrlShow false; } forEach _fillers;

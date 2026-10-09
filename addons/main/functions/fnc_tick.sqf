@@ -21,6 +21,7 @@ if (MSET(enabled)) then {
     GVAR(ads) = false;
     GVAR(optActive) = false;
     GVAR(pipActive) = false;
+    GVAR(eyePip) = false;
     GVAR(nvRequested) = false;
     GVAR(engineOurs) = false;
 };

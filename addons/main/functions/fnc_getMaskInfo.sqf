@@ -23,8 +23,9 @@ params [["_hmd", "", [""]], ["_tube", TUBE_BINO, [0]]];
 
 private _source = MSET(maskSource);
 private _monoCustom = _tube == TUBE_MONO && {MSET(monoCustomMask)};
+private _shape = TUBE_SHAPES select MSET(tubeShape);
 
-GVAR(cacheMask) getOrDefaultCall [format ["%1|%2|%3|%4", toLowerANSI _hmd, _source, _tube, _monoCustom], {
+GVAR(cacheMask) getOrDefaultCall [format ["%1|%2|%3|%4|%5", toLowerANSI _hmd, _source, _tube, _monoCustom, _shape], {
     private _cfg = configFile >> "CfgWeapons" >> _hmd;
     private _texture = "";
     private _kind = "ronim";
@@ -63,7 +64,7 @@ GVAR(cacheMask) getOrDefaultCall [format ["%1|%2|%3|%4", toLowerANSI _hmd, _sour
     };
 
     if (_kind == "ronim") then {
-        _texture = format ["%1mask_%2_ca.paa", TEX_ROOT, TUBE_NAMES select (_tube max 1)];
+        _texture = format ["%1mask_%2_%3_ca.paa", TEX_ROOT, TUBE_NAMES select (_tube max 1), _shape];
     };
 
     private _info = getTextureInfo _texture;

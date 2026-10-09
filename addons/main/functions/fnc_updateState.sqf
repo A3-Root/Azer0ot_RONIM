@@ -46,7 +46,8 @@ private _usable = _tube != TUBE_NONE
     && {cameraOn == _unit || {MSET(allowVehicles) && {cameraOn == vehicle _unit} && {_unit call CBA_fnc_canUseWeapon}}};
 private _firstPerson = cameraView in ["INTERNAL", "GUNNER"];
 private _vision = currentVisionMode _unit;
-private _pip = _usable && {MSET(pipEnabled)} && {isPiPEnabled};
+private _pipAllowed = MSET(pipEnabled) && {isPiPEnabled};
+private _pip = _usable && _pipAllowed && {[MSET(pipBino), MSET(pipMono)] select (_tube == TUBE_MONO)};
 private _settled = diag_tickTime > GVAR(engineCmdUntil);
 
 if (_pip) then {
@@ -105,6 +106,8 @@ private _on = _usable && {[_vision == 1, GVAR(nvRequested)] select _pip};
 GVAR(nvgOn) = _on;
 GVAR(firstPerson) = _firstPerson;
 GVAR(pipActive) = _on && _pip && _firstPerson;
+// Monocular in the game's NVG mode: optional PiP normal view for the naked eye
+GVAR(eyePip) = _on && _firstPerson && !_pip && _pipAllowed && _tube == TUBE_MONO && {MSET(monoOtherEye) == 2};
 
 if (_on && {!_wasOn} && {MSET(misalignToggleReset)}) then {
     GVAR(misalign) = [0, 0, 0];

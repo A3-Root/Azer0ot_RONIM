@@ -1,9 +1,11 @@
 #include "..\script_component.hpp"
 /*
  * Author: Root, Azer0
- * Local night vision camera for PiP mode: follows the player's view (eye, or the optic while
- * aiming) a little ahead to clear the goggles / scope body, matches the current zoom, renders with
- * the PiP night vision effect. Created on demand, destroyed when not needed. Never networked.
+ * Local PiP cameras: follow the player's view (eye, or the optic while aiming) a little ahead to
+ * clear the goggles / scope body and match the current zoom.
+ *   cam:    night vision picture for the tubes (PiP tube modes)
+ *   camEye: normal view for a monocular's naked eye while the tube uses the game's NVG mode
+ * Created on demand, destroyed when not needed. Never networked.
  *
  * Arguments:
  * None
@@ -14,28 +16,38 @@
  * Public: No
  */
 
-private _want = GVAR(pipActive) && {!(GVAR(ads) && GVAR(integrated))};
+private _notIntegrated = !(GVAR(ads) && GVAR(integrated));
+private _wantNv = GVAR(pipActive) && _notIntegrated;
+private _wantEye = GVAR(eyePip) && _notIntegrated;
 
-if (!_want) exitWith {
-    if (!isNull GVAR(cam)) then {
-        GVAR(cam) cameraEffect ["TERMINATE", "BACK", PIP_TARGET];
-        camDestroy GVAR(cam);
-        GVAR(cam) = objNull;
-    };
-};
+// [camera variable, wanted, render target, PiP effect]
+private _cameras = [[QGVAR(cam), _wantNv, PIP_TARGET, 1], [QGVAR(camEye), _wantEye, PIP_TARGET_EYE, 0]];
 
-if (isNull GVAR(cam)) then {
-    GVAR(cam) = "camera" camCreate (positionCameraToWorld [0, 0, 0]);
-    GVAR(cam) cameraEffect ["INTERNAL", "BACK", PIP_TARGET];
-    PIP_TARGET setPiPEffect [1];
-};
-
-private _forward = [MSET(pipForwardHip), MSET(pipForwardAds)] select GVAR(ads);
 private _origin = positionCameraToWorld [0, 0, 0];
 private _dir = (positionCameraToWorld [0, 0, 1]) vectorDiff _origin;
 private _up = (positionCameraToWorld [0, 1, 0]) vectorDiff _origin;
+private _pos = AGLToASL (positionCameraToWorld [0, 0, [MSET(pipForwardHip), MSET(pipForwardAds)] select GVAR(ads)]);
+private _fov = (0.75 / (GVAR(zoom) max 0.01)) * MSET(pipFovScale);
 
-GVAR(cam) setPosASL AGLToASL (positionCameraToWorld [0, 0, _forward]);
-GVAR(cam) setVectorDirAndUp [_dir, _up];
-GVAR(cam) camSetFov ((0.75 / (GVAR(zoom) max 0.01)) * MSET(pipFovScale));
-GVAR(cam) camCommit 0;
+{
+    _x params ["_var", "_want", "_target", "_effect"];
+    private _cam = missionNamespace getVariable [_var, objNull];
+    if (_want) then {
+        if (isNull _cam) then {
+            _cam = "camera" camCreate _origin;
+            _cam cameraEffect ["INTERNAL", "BACK", _target];
+            _target setPiPEffect [_effect];
+            missionNamespace setVariable [_var, _cam];
+        };
+        _cam setPosASL _pos;
+        _cam setVectorDirAndUp [_dir, _up];
+        _cam camSetFov _fov;
+        _cam camCommit 0;
+    } else {
+        if (!isNull _cam) then {
+            _cam cameraEffect ["TERMINATE", "BACK", _target];
+            camDestroy _cam;
+            missionNamespace setVariable [_var, objNull];
+        };
+    };
+} forEach _cameras;

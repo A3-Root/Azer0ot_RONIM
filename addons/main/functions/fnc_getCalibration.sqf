@@ -50,7 +50,7 @@ _quad params ["_halfW", "_halfH", "_centreX", "_centreY"];
 private _modelScale = MSET(opticModelScale);
 [
     2 * _halfH * _modelScale,
-    _centreX * _modelScale / (getResolution select 4),
+    _centreX * _modelScale * (safeZoneH / pixelH) / (safeZoneW / pixelW), // screen heights -> screen widths
     -_centreY * _modelScale,
     (_halfW / (_halfH max 1e-6)) / (_texAspect max 1e-6)
 ]

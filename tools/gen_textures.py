@@ -7,7 +7,7 @@ them to PAA into addons/main/data/ with HEMTT.
 Run from the repository root:  python tools/gen_textures.py
 Needs: numpy, Pillow, hemtt on PATH.
 
-Binocular/quad masks are 2048x1024 (2:1), the monocular mask 1024x1024 (1:1, only the tube's
+Binocular/quad masks are 2048x1024 (2:1), monocular masks 1024x1024 (1:1, only the tube's
 own box is covered, the other eye keeps the real view). The mask control always keeps the
 texture's pixel aspect, so tubes stay circular on any screen. Black = blocked, transparent = tube.
 Reticles are 256x256 white on transparent; the game tints them.
@@ -33,31 +33,64 @@ def smoothstep(e0, e1, x):
     return t * t * (3 - 2 * t)
 
 
-def tube_alpha(xx, yy, cx, cy, r):
-    """Opacity of the mask for one tube: 0 inside, 1 outside, soft edge and vignette."""
-    d = np.sqrt((xx - cx) ** 2 + (yy - cy) ** 2)
-    edge = smoothstep(r - EDGE, r, d)
-    vig = smoothstep(r * (1 - VIGNETTE), r, d) * VIGNETTE_MAX
+# Shape -> (polygon sides or None, apothem / radius, first vertex angle). Polygon tubes are sized by
+# their apothem so every shape fills about the same box as the circle of radius r.
+SHAPES = {
+    "circle": (None, 1.0, 0.0),
+    "square": (4, 0.94, np.pi / 4),
+    "roundsquare": ("super", 0.95, 0.0),
+    "triangle": (3, 0.58, -np.pi / 2),
+    "pentagon": (5, 0.85, -np.pi / 2),
+    "hexagon": (6, 0.95, 0.0),
+    "octagon": (8, 0.97, np.pi / 8),
+}
+
+
+def tube_alpha(xx, yy, cx, cy, r, shape="circle"):
+    """Opacity of the mask for one tube: 0 inside, 1 outside, soft edge and vignette.
+
+    rho = distance / boundary distance in that direction, so 1 is the tube's edge for any shape.
+    """
+    sides, k, first = SHAPES[shape]
+    a = r * k
+    if sides in (3, 5):
+        cy = cy + (a / np.cos(np.pi / sides) - a) / 2  # odd polygons point up: centre them vertically
+    dx, dy = xx - cx, yy - cy
+    d = np.sqrt(dx * dx + dy * dy)
+    theta = np.arctan2(dy, dx)
+    if sides is None:
+        boundary = np.full_like(d, r)
+    elif sides == "super":
+        p = 4.0
+        boundary = a / (np.abs(np.cos(theta)) ** p + np.abs(np.sin(theta)) ** p) ** (1 / p)
+    else:
+        seg = 2 * np.pi / sides
+        boundary = a / np.cos(np.mod(theta - first, seg) - seg / 2)
+    rho = d / boundary
+    edge = smoothstep(1 - EDGE / r, 1, rho)
+    vig = smoothstep(1 - VIGNETTE, 1, rho) * VIGNETTE_MAX
     return np.maximum(edge, vig)
 
 
-def mask(tubes, w):
+def mask(tubes, w, shape="circle"):
     # Coordinates in units of texture height, origin at texture centre
     ys, xs = np.mgrid[0:H, 0:w].astype(np.float32)
     xx = (xs - w / 2 + 0.5) / H
     yy = (ys - H / 2 + 0.5) / H
     alpha = np.ones((H, w), np.float32)
     for cx, cy, r in tubes:
-        alpha = np.minimum(alpha, tube_alpha(xx, yy, cx, cy, r))
+        alpha = np.minimum(alpha, tube_alpha(xx, yy, cx, cy, r, shape))
     rgba = np.zeros((H, w, 4), np.uint8)
     rgba[..., 3] = (alpha * 255).round().astype(np.uint8)
     return Image.fromarray(rgba, "RGBA")
 
 
+# Written as mask_<tube>_<shape>_ca.paa for every shape. Ellipse/rectangle are the circle/square
+# stretched in game (Shape width setting).
 MASKS = {
-    "mask_mono_ca": (H, [(0.0, 0.0, 0.47)]),
-    "mask_bino_ca": (W, [(-0.30, 0.0, 0.42), (0.30, 0.0, 0.42)]),
-    "mask_quad_ca": (W, [(-0.27, 0.0, 0.40), (0.27, 0.0, 0.40), (-0.70, 0.02, 0.33), (0.70, 0.02, 0.33)]),
+    "mono": (H, [(0.0, 0.0, 0.47)]),
+    "bino": (W, [(-0.30, 0.0, 0.42), (0.30, 0.0, 0.42)]),
+    "quad": (W, [(-0.27, 0.0, 0.40), (0.27, 0.0, 0.40), (-0.70, 0.02, 0.33), (0.70, 0.02, 0.33)]),
 }
 
 
@@ -110,7 +143,13 @@ def convert(name, img):
 if __name__ == "__main__":
     os.makedirs(SRC, exist_ok=True)
     os.makedirs(OUT, exist_ok=True)
-    for name, (w, tubes) in MASKS.items():
-        convert(name, mask(tubes, w))
+    for old in ("mask_mono_ca", "mask_bino_ca", "mask_quad_ca"):
+        for ext, folder in ((".paa", OUT), (".png", SRC)):
+            path = os.path.join(folder, old + ext)
+            if os.path.exists(path):
+                os.remove(path)
+    for tube, (w, tubes) in MASKS.items():
+        for shape in SHAPES:
+            convert(f"mask_{tube}_{shape}_ca", mask(tubes, w, shape))
     for style in ("dot", "cross", "chevron", "mildot"):
         convert(f"reticle_{style}_ca", reticle(style))
