@@ -35,6 +35,11 @@
 #define IDC_FILL_LEFT 103
 #define IDC_FILL_RIGHT 104
 #define IDC_RETICLE 120
+#define IDC_GROUP 200
+#define IDC_PIP 201
+
+// PiP render target, local to this client
+#define PIP_TARGET "azeroot_ronim_nv"
 
 #define TUBE_NONE 0
 #define TUBE_MONO 1

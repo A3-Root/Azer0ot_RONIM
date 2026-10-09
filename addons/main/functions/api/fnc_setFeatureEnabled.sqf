@@ -2,7 +2,7 @@
 /*
  * Author: Root, Azer0
  * Switches one RONIM feature on or off for the whole mission (a setting override).
- * Features: "all", "mask", "sway", "adsSway", "misalign", "mount", "bruise", "flash", "reticle"
+ * Features: "all", "pip", "mask", "sway", "adsSway", "misalign", "mount", "bruise", "flash", "reticle"
  * (or the setting name itself, e.g. "mountEnabled"). nil returns the feature to its CBA setting.
  * Runs on the server (forwarded automatically).
  *
@@ -25,6 +25,7 @@ params [["_feature", "", [""]], ["_enabled", nil, [true]]];
 private _name = switch (toLowerANSI _feature) do {
     case "all";
     case "enabled": { "enabled" };
+    case "pip": { "pipEnabled" };
     case "mask": { "maskEnabled" };
     case "sway": { "swayEnabled" };
     case "adssway": { "adsSwayEnabled" };

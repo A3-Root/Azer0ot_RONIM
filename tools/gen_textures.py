@@ -7,8 +7,9 @@ them to PAA into addons/main/data/ with HEMTT.
 Run from the repository root:  python tools/gen_textures.py
 Needs: numpy, Pillow, hemtt on PATH.
 
-Masks are 2048x1024 (2:1). The mask control is always sized to a 2:1 pixel aspect, so the
-tubes stay circular on any screen. Black = blocked, transparent = tube view.
+Binocular/quad masks are 2048x1024 (2:1), the monocular mask 1024x1024 (1:1, only the tube's
+own box is covered, the other eye keeps the real view). The mask control always keeps the
+texture's pixel aspect, so tubes stay circular on any screen. Black = blocked, transparent = tube.
 Reticles are 256x256 white on transparent; the game tints them.
 """
 import os
@@ -40,23 +41,23 @@ def tube_alpha(xx, yy, cx, cy, r):
     return np.maximum(edge, vig)
 
 
-def mask(tubes):
+def mask(tubes, w):
     # Coordinates in units of texture height, origin at texture centre
-    ys, xs = np.mgrid[0:H, 0:W].astype(np.float32)
-    xx = (xs - W / 2 + 0.5) / H
+    ys, xs = np.mgrid[0:H, 0:w].astype(np.float32)
+    xx = (xs - w / 2 + 0.5) / H
     yy = (ys - H / 2 + 0.5) / H
-    alpha = np.ones((H, W), np.float32)
+    alpha = np.ones((H, w), np.float32)
     for cx, cy, r in tubes:
         alpha = np.minimum(alpha, tube_alpha(xx, yy, cx, cy, r))
-    rgba = np.zeros((H, W, 4), np.uint8)
+    rgba = np.zeros((H, w, 4), np.uint8)
     rgba[..., 3] = (alpha * 255).round().astype(np.uint8)
     return Image.fromarray(rgba, "RGBA")
 
 
 MASKS = {
-    "mask_mono_ca": [(0.0, 0.0, 0.46)],
-    "mask_bino_ca": [(-0.30, 0.0, 0.42), (0.30, 0.0, 0.42)],
-    "mask_quad_ca": [(-0.27, 0.0, 0.40), (0.27, 0.0, 0.40), (-0.70, 0.02, 0.33), (0.70, 0.02, 0.33)],
+    "mask_mono_ca": (H, [(0.0, 0.0, 0.47)]),
+    "mask_bino_ca": (W, [(-0.30, 0.0, 0.42), (0.30, 0.0, 0.42)]),
+    "mask_quad_ca": (W, [(-0.27, 0.0, 0.40), (0.27, 0.0, 0.40), (-0.70, 0.02, 0.33), (0.70, 0.02, 0.33)]),
 }
 
 
@@ -109,7 +110,7 @@ def convert(name, img):
 if __name__ == "__main__":
     os.makedirs(SRC, exist_ok=True)
     os.makedirs(OUT, exist_ok=True)
-    for name, tubes in MASKS.items():
-        convert(name, mask(tubes))
+    for name, (w, tubes) in MASKS.items():
+        convert(name, mask(tubes, w))
     for style in ("dot", "cross", "chevron", "mildot"):
         convert(f"reticle_{style}_ca", reticle(style))

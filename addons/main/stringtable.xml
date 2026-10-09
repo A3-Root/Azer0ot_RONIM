@@ -5,7 +5,7 @@
             <English>ACE NVG mask handling</English>
         </Key>
         <Key ID="STR_azeroot_ronim_main_aceMaskMode_desc">
-            <English>Only with ACE Nightvision loaded, which draws its own static tube mask.\nRONIM mask hides the ACE mask; ACE mask keeps ACE's and turns RONIM's off (no tube sway); Both draws both.</English>
+            <English>Only with ACE Nightvision loaded and the game's NVG mode in use (PiP off / third person).\nRONIM mask hides the ACE mask; ACE mask keeps ACE's and turns RONIM's off (no tube sway); Both draws both.</English>
         </Key>
         <Key ID="STR_azeroot_ronim_main_aceMaskMode_opt0">
             <English>RONIM mask</English>
@@ -68,7 +68,7 @@
             <English>Bruise damage</English>
         </Key>
         <Key ID="STR_azeroot_ronim_main_bruiseDamage_desc">
-            <English>Damage of one bruise. ACE: below 0.35 gives a contusion.</English>
+            <English>Damage of one bruise. ACE needs at least 0.1 for a wound; below 0.35 it is a contusion or crush.</English>
         </Key>
         <Key ID="STR_azeroot_ronim_main_bruiseEnabled">
             <English>Recoil bruising</English>
@@ -82,35 +82,41 @@
         <Key ID="STR_azeroot_ronim_main_bruiseRecoilScale_desc">
             <English>Powerful rounds bruise more often and harder.</English>
         </Key>
+        <Key ID="STR_azeroot_ronim_main_calibHint">
+            <English>RONIM mask calibration (saved for you)</English>
+        </Key>
         <Key ID="STR_azeroot_ronim_main_cat">
             <English>RONIM - Optic Nightvision</English>
         </Key>
         <Key ID="STR_azeroot_ronim_main_cat_ads">
-            <English>03 ADS Sway and Misalignment</English>
+            <English>04 ADS Sway and Misalignment</English>
         </Key>
         <Key ID="STR_azeroot_ronim_main_cat_bruise">
-            <English>05 Recoil Bruise</English>
+            <English>06 Recoil Bruise</English>
         </Key>
         <Key ID="STR_azeroot_ronim_main_cat_classes">
-            <English>08 Classes</English>
+            <English>09 Classes</English>
         </Key>
         <Key ID="STR_azeroot_ronim_main_cat_debug">
-            <English>09 Debug</English>
+            <English>10 Debug</English>
         </Key>
         <Key ID="STR_azeroot_ronim_main_cat_flash">
-            <English>06 Muzzle Flash Bloom</English>
+            <English>07 Muzzle Flash Bloom</English>
         </Key>
         <Key ID="STR_azeroot_ronim_main_cat_general">
             <English>01 General</English>
         </Key>
         <Key ID="STR_azeroot_ronim_main_cat_mask">
-            <English>02 Tube Mask and Sway</English>
+            <English>03 Tube Mask and Sway</English>
         </Key>
         <Key ID="STR_azeroot_ronim_main_cat_mount">
-            <English>04 Mount Failure</English>
+            <English>05 Mount Failure</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_cat_pip">
+            <English>02 Night Vision Picture (PiP)</English>
         </Key>
         <Key ID="STR_azeroot_ronim_main_cat_reticle">
-            <English>07 Monocular Reticle</English>
+            <English>08 Reticle</English>
         </Key>
         <Key ID="STR_azeroot_ronim_main_category">
             <English>RONIM</English>
@@ -178,8 +184,11 @@
         <Key ID="STR_azeroot_ronim_main_feature_mountEnabled">
             <English>Mount failure</English>
         </Key>
+        <Key ID="STR_azeroot_ronim_main_feature_pipEnabled">
+            <English>PiP night vision</English>
+        </Key>
         <Key ID="STR_azeroot_ronim_main_feature_reticleEnabled">
-            <English>Monocular reticle</English>
+            <English>Reticle</English>
         </Key>
         <Key ID="STR_azeroot_ronim_main_feature_swayEnabled">
             <English>Tube sway</English>
@@ -247,6 +256,36 @@
         <Key ID="STR_azeroot_ronim_main_integratedWhitelist_desc">
             <English>Optics (or weapons with built-in optics) treated as having their own night vision: no optic features.\nComma separated classnames, case insensitive.</English>
         </Key>
+        <Key ID="STR_azeroot_ronim_main_kb_category">
+            <English>RONIM</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_kb_down">
+            <English>Mask calibration: down</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_kb_left">
+            <English>Mask calibration: left</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_kb_narrower">
+            <English>Mask calibration: narrower</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_kb_reset">
+            <English>Mask calibration: reset this NVG</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_kb_right">
+            <English>Mask calibration: right</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_kb_scaleDown">
+            <English>Mask calibration: smaller</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_kb_scaleUp">
+            <English>Mask calibration: bigger</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_kb_up">
+            <English>Mask calibration: up</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_kb_wider">
+            <English>Mask calibration: wider</English>
+        </Key>
         <Key ID="STR_azeroot_ronim_main_keep">
             <English>Keep setting</English>
         </Key>
@@ -256,11 +295,17 @@
         <Key ID="STR_azeroot_ronim_main_magThreshold_desc">
             <English>Zoom at or above which an optic counts as magnified. Optic features (mount failure, bruise, ADS sway,\nmisalignment, flash bloom, monocular reticle) need this. Iron sights and holo sights sit around 1.0-1.3x.</English>
         </Key>
+        <Key ID="STR_azeroot_ronim_main_maskCalibration">
+            <English>Mask calibration</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_maskCalibration_desc">
+            <English>Tube mask size and position per NVG as class:scale:offsetX:offsetY:stretch entries, comma separated.\nScale = mask height in screen heights, offsets in screen fractions, stretch = width multiplier.\nTune in game with the RONIM calibration keybinds (saved per player); the hint shows the entry to paste here.</English>
+        </Key>
         <Key ID="STR_azeroot_ronim_main_maskEnabled">
             <English>Draw NVG tube mask</English>
         </Key>
         <Key ID="STR_azeroot_ronim_main_maskEnabled_desc">
-            <English>Black out everything outside the NVG tube(s) while NVGs are on.\nOff = full screen night vision (sway then has nothing to move).</English>
+            <English>Black out everything outside the NVG tube(s) while NVGs are on.\nOff = full screen night vision.</English>
         </Key>
         <Key ID="STR_azeroot_ronim_main_maskOpacity">
             <English>Mask opacity</English>
@@ -268,11 +313,35 @@
         <Key ID="STR_azeroot_ronim_main_maskOpacity_desc">
             <English>How dark the area outside the tubes is.\nLower = you can see a little around the tubes.</English>
         </Key>
+        <Key ID="STR_azeroot_ronim_main_maskOverHud">
+            <English>Mask in front</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_maskOverHud_desc">
+            <English>Draw the tube overlay over the HUD layer, in front of the NVG's own optic overlay.\nCovers HUD elements in the blacked out area while NVGs are on. Off = under the HUD.</English>
+        </Key>
         <Key ID="STR_azeroot_ronim_main_maskScale">
             <English>Tube size</English>
         </Key>
         <Key ID="STR_azeroot_ronim_main_maskScale_desc">
             <English>Size of the tube view.\nHigher = larger tubes, less blacked out.</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_maskSource">
+            <English>Tube shape source</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_maskSource_desc">
+            <English>Where the tube mask's shape comes from.\nAuto: the NVG's own optic overlay texture (from RONIM's NVG compat addons or found next to its modelOptics),\nelse its ACE border texture, else RONIM's.\nSize and position per NVG come from Classes &gt; Mask calibration and the calibration keybinds.</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_maskSource_opt0">
+            <English>Auto</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_maskSource_opt1">
+            <English>NVG optic texture</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_maskSource_opt2">
+            <English>ACE border texture</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_maskSource_opt3">
+            <English>RONIM generic</English>
         </Key>
         <Key ID="STR_azeroot_ronim_main_misalignAutoRecover">
             <English>Auto recover</English>
@@ -322,6 +391,24 @@
         <Key ID="STR_azeroot_ronim_main_misalignToggleReset_desc">
             <English>Turning the NVGs off and on again clears the misalignment.</English>
         </Key>
+        <Key ID="STR_azeroot_ronim_main_monoCustomMask">
+            <English>Custom monocular mask</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_monoCustomMask_desc">
+            <English>Monocular NVGs always use RONIM's monocular mask: one tube in front of the chosen eye, the rest dark,\nwhatever the NVG's own overlay looks like.</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_monoOtherEye">
+            <English>Monocular other eye</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_monoOtherEye_desc">
+            <English>What the eye without the tube sees.\nReal view needs PiP night vision; in the game's NVG mode the other eye is always dark.</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_monoOtherEye_opt0">
+            <English>Dark</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_monoOtherEye_opt1">
+            <English>Real view (PiP)</English>
+        </Key>
         <Key ID="STR_azeroot_ronim_main_monoShift">
             <English>Monocular tube shift</English>
         </Key>
@@ -332,13 +419,13 @@
             <English>Monocular eye</English>
         </Key>
         <Key ID="STR_azeroot_ronim_main_monoSide_desc">
-            <English>Which eye a monocular NVG sits in front of. The monocular reticle appears on the other side.</English>
+            <English>Which eye a monocular NVG sits in front of.</English>
         </Key>
         <Key ID="STR_azeroot_ronim_main_monoSide_opt0">
-            <English>Left eye (reticle right)</English>
+            <English>Left eye</English>
         </Key>
         <Key ID="STR_azeroot_ronim_main_monoSide_opt1">
-            <English>Right eye (reticle left)</English>
+            <English>Right eye</English>
         </Key>
         <Key ID="STR_azeroot_ronim_main_mountBrokenHint">
             <English>Your NVG mount broke - the goggles fell off.</English>
@@ -433,6 +520,12 @@
         <Key ID="STR_azeroot_ronim_main_on">
             <English>On</English>
         </Key>
+        <Key ID="STR_azeroot_ronim_main_opticModelScale">
+            <English>Optic overlay scale</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_opticModelScale_desc">
+            <English>Screen heights per optic model unit, used to size NVG overlays from their real model geometry (NVG compat addons).\nCalibrate one NVG, then every NVG overlay is sized correctly relative to it. The calibration hint shows the value.</English>
+        </Key>
         <Key ID="STR_azeroot_ronim_main_opticsAdd">
             <English>Add classes</English>
         </Key>
@@ -453,6 +546,45 @@
         </Key>
         <Key ID="STR_azeroot_ronim_main_pickCategory">
             <English>Settings group</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_pipEnabled">
+            <English>PiP night vision</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_pipEnabled_desc">
+            <English>In first person, RONIM renders the night vision itself in a picture-in-picture view inside the tubes and keeps\nthe game's own NVG mode off (no vanilla/ACE tube overlay). A monocular leaves the other eye with the real view.\nNeeds PiP enabled in video options. Third person and disabled PiP fall back to the game's NVG mode.\nOff = the game's NVG mode with RONIM's tube overlay drawn in front of it.</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_pipForwardAds">
+            <English>Camera offset (aiming)</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_pipForwardAds_desc">
+            <English>Metres the night vision camera sits ahead of the optic while aiming, past the scope body.</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_pipForwardHip">
+            <English>Camera offset (hip)</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_pipForwardHip_desc">
+            <English>Metres the night vision camera sits ahead of your eye when not aiming, so it does not see the inside of the\ngoggles or helmet.</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_pipFovScale">
+            <English>PiP field of view</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_pipFovScale_desc">
+            <English>Fine-tunes the night vision picture's field of view against the real view.\nAbove 1 = wider, below 1 = narrower.</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_pipResolution">
+            <English>PiP resolution</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_pipResolution_desc">
+            <English>Render resolution of the night vision picture.\nHigher = sharper, costs more FPS.</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_pipResolution_opt0">
+            <English>512</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_pipResolution_opt1">
+            <English>1024</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_pipResolution_opt2">
+            <English>2048</English>
         </Key>
         <Key ID="STR_azeroot_ronim_main_recoilCamShake">
             <English>Recoil camera shake</English>
@@ -506,10 +638,10 @@
             <English>Black</English>
         </Key>
         <Key ID="STR_azeroot_ronim_main_reticleEnabled">
-            <English>Monocular reticle</English>
+            <English>Reticle over night vision</English>
         </Key>
         <Key ID="STR_azeroot_ronim_main_reticleEnabled_desc">
-            <English>With a monocular NVG, the naked eye still sees the scope: a copy of the reticle is drawn on the side\nwithout the tube. Only while aiming through a magnified optic (above the General magnification threshold) with NVGs on.</English>
+            <English>PiP: the night vision picture covers the scope, so a copy of the optic's reticle is drawn at the aim point on\ntop of it. Tube sway and misalignment move the picture against it. Only while aiming through a magnified optic (above the General magnification threshold) with NVGs on.</English>
         </Key>
         <Key ID="STR_azeroot_ronim_main_reticleMap">
             <English>Reticle per optic</English>
@@ -521,13 +653,19 @@
             <English>Reticle offset</English>
         </Key>
         <Key ID="STR_azeroot_ronim_main_reticleOffset_desc">
-            <English>Horizontal distance from screen centre, as a fraction of screen width.</English>
+            <English>Monocular side copy: horizontal distance from screen centre, as a fraction of screen width.</English>
         </Key>
         <Key ID="STR_azeroot_ronim_main_reticleOpacity">
             <English>Reticle opacity</English>
         </Key>
         <Key ID="STR_azeroot_ronim_main_reticleOpacity_desc">
             <English>How visible the reticle copy is.</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_reticleSideCopy">
+            <English>Monocular side copy</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_reticleSideCopy_desc">
+            <English>Game NVG mode only (PiP off / third person): with a monocular, draw a copy of the reticle on the side\nwithout the tube.</English>
         </Key>
         <Key ID="STR_azeroot_ronim_main_reticleSize">
             <English>Reticle size</English>

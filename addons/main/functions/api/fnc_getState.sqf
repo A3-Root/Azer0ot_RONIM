@@ -9,7 +9,7 @@
  *
  * Return Value:
  * State <HASHMAP>: exempt, hmd, tube ("none"/"mono"/"bino"/"quad"), live, and when live:
- * nvgOn, ads, zoom, magnified, integrated, opticFeatures, misalign, flash, sway ([x, y])
+ * nvgOn, pip, ads, zoom, magnified, integrated, opticFeatures, misalign, flash, sway ([x, y])
  *
  * Example:
  * ([player] call azeroot_ronim_fnc_getState) get "opticFeatures"
@@ -30,6 +30,7 @@ private _state = createHashMapFromArray [
 if (hasInterface && {_unit isEqualTo (missionNamespace getVariable [QGVAR(unit), objNull])}) then {
     _state set ["live", true];
     _state set ["nvgOn", GVAR(nvgOn)];
+    _state set ["pip", GVAR(pipActive)];
     _state set ["ads", GVAR(ads)];
     _state set ["zoom", GVAR(zoom)];
     _state set ["magnified", GVAR(magnified)];

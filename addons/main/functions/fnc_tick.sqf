@@ -20,8 +20,12 @@ if (MSET(enabled)) then {
     GVAR(nvgOn) = false;
     GVAR(ads) = false;
     GVAR(optActive) = false;
+    GVAR(pipActive) = false;
+    GVAR(nvRequested) = false;
+    GVAR(engineOurs) = false;
 };
 
+call FUNC(pipUpdate);
 [_dt] call FUNC(swayStep);
 
 if (GVAR(flashLevel) > 0) then {
@@ -42,6 +46,11 @@ if (!GVAR(aceSway)) then {
             GVAR(aimCoefSet) = false;
         };
     };
+};
+
+if (GVAR(calibSaveAt) > 0 && {diag_tickTime > GVAR(calibSaveAt)}) then {
+    GVAR(calibSaveAt) = 0;
+    saveProfileNamespace;
 };
 
 if (GVAR(debugOverlay) && {diag_tickTime > GVAR(debugNext)}) then {

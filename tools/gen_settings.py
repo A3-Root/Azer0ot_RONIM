@@ -68,11 +68,46 @@ check("autoDetectIntegrated", "Auto-detect integrated NV optics", tip(
     "Optics whose own vision modes include NVG or thermal never get the optic features.",
     "Off = only the Classes > Integrated NV optics list counts."), True)
 
-# ======================================================================= 02 Tube mask and sway
+# ======================================================================= 02 Night vision picture
+cat("pip", "Night Vision Picture (PiP)")
+check("pipEnabled", "PiP night vision", tip(
+    "In first person, RONIM renders the night vision itself in a picture-in-picture view inside the tubes and keeps",
+    "the game's own NVG mode off (no vanilla/ACE tube overlay). A monocular leaves the other eye with the real view.",
+    "Needs PiP enabled in video options. Third person and disabled PiP fall back to the game's NVG mode.",
+    "Off = the game's NVG mode with RONIM's tube overlay drawn in front of it."), False)
+lst("pipResolution", "PiP resolution", tip(
+    "Render resolution of the night vision picture.",
+    "Higher = sharper, costs more FPS."), [512, 1024, 2048], [("512", ""), ("1024", ""), ("2048", "")], 1, glob=False)
+slider("pipForwardHip", "Camera offset (hip)", tip(
+    "Metres the night vision camera sits ahead of your eye when not aiming, so it does not see the inside of the",
+    "goggles or helmet."), 0.0, 0.6, 0.22, 2)
+slider("pipForwardAds", "Camera offset (aiming)", tip(
+    "Metres the night vision camera sits ahead of the optic while aiming, past the scope body."), 0.0, 1.5, 0.5, 2)
+slider("pipFovScale", "PiP field of view", tip(
+    "Fine-tunes the night vision picture's field of view against the real view.",
+    "Above 1 = wider, below 1 = narrower."), 0.8, 1.25, 1.0, 3, glob=False)
+
+# ======================================================================= 03 Tube mask and sway
 cat("mask", "Tube Mask and Sway")
 check("maskEnabled", "Draw NVG tube mask", tip(
     "Black out everything outside the NVG tube(s) while NVGs are on.",
-    "Off = full screen night vision (sway then has nothing to move)."), True)
+    "Off = full screen night vision."), True)
+lst("maskSource", "Tube shape source", tip(
+    "Where the tube mask's shape comes from.",
+    "Auto: the NVG's own optic overlay texture (from RONIM's NVG compat addons or found next to its modelOptics),",
+    "else its ACE border texture, else RONIM's.",
+    "Size and position per NVG come from Classes > Mask calibration and the calibration keybinds."),
+    [0, 1, 2, 3], [("Auto", ""), ("NVG optic texture", ""), ("ACE border texture", ""), ("RONIM generic", "")], 0)
+check("monoCustomMask", "Custom monocular mask", tip(
+    "Monocular NVGs always use RONIM's monocular mask: one tube in front of the chosen eye, the rest dark,",
+    "whatever the NVG's own overlay looks like."), True)
+slider("opticModelScale", "Optic overlay scale", tip(
+    "Screen heights per optic model unit, used to size NVG overlays from their real model geometry (NVG compat addons).",
+    "Calibrate one NVG, then every NVG overlay is sized correctly relative to it. The calibration hint shows the value."),
+    2, 60, 19.41, 2)
+check("maskOverHud", "Mask in front", tip(
+    "Draw the tube overlay over the HUD layer, in front of the NVG's own optic overlay.",
+    "Covers HUD elements in the blacked out area while NVGs are on. Off = under the HUD."), True, glob=False)
 slider("maskOpacity", "Mask opacity", tip(
     "How dark the area outside the tubes is.",
     "Lower = you can see a little around the tubes."), 0.5, 1.0, 1.0, 2, pct=True, glob=False)
@@ -80,36 +115,40 @@ slider("maskScale", "Tube size", tip(
     "Size of the tube view.",
     "Higher = larger tubes, less blacked out."), 0.6, 1.6, 1.0, 2, glob=False)
 lst("monoSide", "Monocular eye", tip(
-    "Which eye a monocular NVG sits in front of. The monocular reticle appears on the other side."),
-    [0, 1], [("Left eye (reticle right)", ""), ("Right eye (reticle left)", "")], 0)
+    "Which eye a monocular NVG sits in front of."),
+    [0, 1], [("Left eye", ""), ("Right eye", "")], 1)
+lst("monoOtherEye", "Monocular other eye", tip(
+    "What the eye without the tube sees.",
+    "Real view needs PiP night vision; in the game's NVG mode the other eye is always dark."),
+    [0, 1], [("Dark", ""), ("Real view (PiP)", "")], 1)
 slider("monoShift", "Monocular tube shift", tip(
     "How far a monocular tube sits off centre, as a fraction of screen width.",
-    "0 = centred."), 0.0, 0.35, 0.16, 2)
+    "0 = centred."), 0.0, 0.4, 0.25, 2)
 check("swayEnabled", "Tube sway", tip(
     "The tube view lags and bobs with head movement, walking and fatigue.",
     "Off = tube fixed to the screen centre."), True)
 slider("swayStrength", "Sway strength", tip(
     "Overall multiplier for all tube sway.",
-    "2.0 = twice the movement, 0.5 = half."), 0.0, 3.0, 1.0, 2)
+    "2.0 = twice the movement, 0.5 = half."), 0.0, 6.0, 1.6, 2)
 slider("swayLook", "Head turn lag", tip(
-    "How much the tube lags behind when you turn your head."), 0.0, 3.0, 1.0, 2)
+    "How much the tube lags behind when you turn your head."), 0.0, 5.0, 1.5, 2)
 slider("swayMove", "Walking bob", tip(
-    "How much the tube bobs while moving. Scales with speed, less when crouched or prone."), 0.0, 3.0, 1.0, 2)
+    "How much the tube bobs while moving. Scales with speed, less when crouched or prone."), 0.0, 5.0, 1.5, 2)
 slider("swayIdle", "Idle drift", tip(
-    "Slow drift while standing still."), 0.0, 3.0, 1.0, 2)
+    "Slow drift while standing still."), 0.0, 5.0, 1.3, 2)
 slider("swayFatigue", "Fatigue effect", tip(
     "Extra drift when tired.",
-    "0 = fatigue has no effect."), 0.0, 3.0, 1.0, 2)
+    "0 = fatigue has no effect."), 0.0, 5.0, 1.0, 2)
 slider("swayStiffness", "Mount stiffness", tip(
     "How firmly the mount pulls the tube back to centre.",
-    "Higher = snappier, smaller swings. Lower = looser, wobblier."), 5, 60, 22, 0)
+    "Higher = snappier, smaller swings. Lower = looser, wobblier."), 3, 60, 16, 0)
 slider("swayDamping", "Mount damping", tip(
     "How quickly wobbles die out.",
     "Higher = settles fast. Lower = keeps bouncing."), 1, 20, 7, 1)
 slider("swayMaxOffset", "Max sway offset", tip(
-    "Furthest the tube may sway from centre, as a fraction of screen height."), 0.01, 0.2, 0.06, 3)
+    "Furthest the tube may sway from centre, as a fraction of screen height."), 0.01, 0.4, 0.12, 3)
 lst("aceMaskMode", "ACE NVG mask handling", tip(
-    "Only with ACE Nightvision loaded, which draws its own static tube mask.",
+    "Only with ACE Nightvision loaded and the game's NVG mode in use (PiP off / third person).",
     "RONIM mask hides the ACE mask; ACE mask keeps ACE's and turns RONIM's off (no tube sway); Both draws both."),
     [0, 1, 2], [("RONIM mask", ""), ("ACE mask", ""), ("Both", "")], 0)
 
@@ -120,9 +159,9 @@ check("adsSwayEnabled", "Independent ADS sway", tip(
     "weapon, and recoil kicks it. " + MAG), True)
 slider("adsSwayStrength", "ADS sway strength", tip(
     "Size of the independent tube sway while aiming.",
-    "2.0 = twice the movement, 0 = none."), 0.0, 4.0, 1.5, 2)
+    "2.0 = twice the movement, 0 = none."), 0.0, 8.0, 3.0, 2)
 slider("recoilKick", "Recoil kick", tip(
-    "How hard each shot knocks the tube. Scales with the round's power."), 0.0, 4.0, 1.0, 2)
+    "How hard each shot knocks the tube. Scales with the round's power."), 0.0, 8.0, 2.0, 2)
 slider("recoilCamShake", "Recoil camera shake", tip(
     "Extra camera shake per shot while aiming with NVGs.",
     "0 = off."), 0.0, 5.0, 0.0, 1)
@@ -134,9 +173,9 @@ check("misalignEnabled", "Mount misalignment", tip(
 slider("misalignChance", "Misalignment chance per shot", tip(
     "Chance that one shot shifts the mount. Scales with the round's power."), 0.0, 1.0, 0.05, 1, pct=True)
 slider("misalignStep", "Misalignment per shift", tip(
-    "How far one shift moves the tube, as a fraction of screen height."), 0.002, 0.05, 0.012, 3)
+    "How far one shift moves the tube, as a fraction of screen height."), 0.002, 0.08, 0.015, 3)
 slider("misalignMax", "Max misalignment", tip(
-    "Furthest the mount can end up off centre, as a fraction of screen height."), 0.01, 0.15, 0.06, 3)
+    "Furthest the mount can end up off centre, as a fraction of screen height."), 0.01, 0.3, 0.08, 3)
 check("misalignToggleReset", "NVG toggle re-seats", tip(
     "Turning the NVGs off and on again clears the misalignment."), True)
 check("misalignAutoRecover", "Auto recover", tip(
@@ -168,7 +207,7 @@ check("bruiseEnabled", "Recoil bruising", tip(
 slider("bruiseChance", "Bruise chance per shot", tip(
     "Chance that one shot bruises you (outside the cooldown)."), 0.0, 1.0, 0.1, 0, pct=True)
 slider("bruiseDamage", "Bruise damage", tip(
-    "Damage of one bruise. ACE: below 0.35 gives a contusion."), 0.01, 0.34, 0.1, 2)
+    "Damage of one bruise. ACE needs at least 0.1 for a wound; below 0.35 it is a contusion or crush."), 0.1, 0.34, 0.15, 2)
 slider("bruiseCooldown", "Bruise cooldown", tip(
     "Minimum seconds between two bruises."), 0, 120, 15, 0)
 check("bruiseRecoilScale", "Scale with recoil", tip(
@@ -198,15 +237,18 @@ slider("flashNearbyScale", "Nearby intensity", tip(
     "Bloom from another shooter at point blank, relative to your own shot."), 0.0, 1.0, 0.6, 0, pct=True)
 
 # ======================================================================= 07 Monocular reticle
-cat("reticle", "Monocular Reticle")
-check("reticleEnabled", "Monocular reticle", tip(
-    "With a monocular NVG, the naked eye still sees the scope: a copy of the reticle is drawn on the side",
-    "without the tube. " + MAG), True)
+cat("reticle", "Reticle")
+check("reticleEnabled", "Reticle over night vision", tip(
+    "PiP: the night vision picture covers the scope, so a copy of the optic's reticle is drawn at the aim point on",
+    "top of it. Tube sway and misalignment move the picture against it. " + MAG), True)
+check("reticleSideCopy", "Monocular side copy", tip(
+    "Game NVG mode only (PiP off / third person): with a monocular, draw a copy of the reticle on the side",
+    "without the tube."), True)
 lst("reticleStyle", "Default reticle", tip(
     "Reticle drawn when the optic has no entry in Classes > Reticle per optic."),
     [0, 1, 2, 3], [("Dot", ""), ("Cross", ""), ("Chevron", ""), ("Mil-dot", "")], 1)
 slider("reticleOffset", "Reticle offset", tip(
-    "Horizontal distance from screen centre, as a fraction of screen width."), 0.05, 0.45, 0.22, 2)
+    "Monocular side copy: horizontal distance from screen centre, as a fraction of screen width."), 0.05, 0.45, 0.22, 2)
 slider("reticleSize", "Reticle size", tip(
     "Reticle size as a fraction of screen height."), 0.02, 0.4, 0.14, 2, glob=False)
 slider("reticleOpacity", "Reticle opacity", tip(
@@ -231,6 +273,10 @@ edit("suppressorWhitelist", "Always suppressor", tip(
     "Muzzle attachments always counted as suppressors (no bloom).", LISTFMT))
 edit("suppressorBlacklist", "Never suppressor", tip(
     "Muzzle attachments never counted as suppressors (bloom).", LISTFMT))
+edit("maskCalibration", "Mask calibration", tip(
+    "Tube mask size and position per NVG as class:scale:offsetX:offsetY:stretch entries, comma separated.",
+    "Scale = mask height in screen heights, offsets in screen fractions, stretch = width multiplier.",
+    "Tune in game with the RONIM calibration keybinds (saved per player); the hint shows the entry to paste here."))
 edit("reticleMap", "Reticle per optic", tip(
     "Monocular reticle per optic as class:style pairs, styles dot, cross, chevron, mildot.",
     "Example: optic_Hamr:chevron, optic_Arco:chevron, optic_MRCO:dot"))
@@ -251,6 +297,17 @@ EXTRA = {
     "reseat": "Re-seat NVG mount",
     "reseating": "Re-seating NVG mount...",
     "reseated": "NVG mount re-seated.",
+    "kb_category": "RONIM",
+    "kb_scaleUp": "Mask calibration: bigger",
+    "kb_scaleDown": "Mask calibration: smaller",
+    "kb_up": "Mask calibration: up",
+    "kb_down": "Mask calibration: down",
+    "kb_left": "Mask calibration: left",
+    "kb_right": "Mask calibration: right",
+    "kb_wider": "Mask calibration: wider",
+    "kb_narrower": "Mask calibration: narrower",
+    "kb_reset": "Mask calibration: reset this NVG",
+    "calibHint": "RONIM mask calibration (saved for you)",
     # modules
     "category": "RONIM",
     "eden_settings": "RONIM Settings",
@@ -291,6 +348,7 @@ EXTRA = {
 
 FEATURES = [
     ("enabled", "RONIM (all)"),
+    ("pipEnabled", "PiP night vision"),
     ("maskEnabled", "Tube mask"),
     ("swayEnabled", "Tube sway"),
     ("adsSwayEnabled", "ADS sway"),
@@ -298,7 +356,7 @@ FEATURES = [
     ("mountEnabled", "Mount failure"),
     ("bruiseEnabled", "Recoil bruise"),
     ("flashEnabled", "Flash bloom"),
-    ("reticleEnabled", "Monocular reticle"),
+    ("reticleEnabled", "Reticle"),
 ]
 
 

@@ -4,11 +4,22 @@ ATTR_TRI(RONIM_S_enabled,"$STR_azeroot_ronim_main_enabled","$STR_azeroot_ronim_m
 ATTR_TRI(RONIM_S_allowVehicles,"$STR_azeroot_ronim_main_allowVehicles","$STR_azeroot_ronim_main_allowVehicles_desc");
 ATTR_NUM(RONIM_S_magThreshold,"$STR_azeroot_ronim_main_magThreshold","$STR_azeroot_ronim_main_magThreshold_desc");
 ATTR_TRI(RONIM_S_autoDetectIntegrated,"$STR_azeroot_ronim_main_autoDetectIntegrated","$STR_azeroot_ronim_main_autoDetectIntegrated_desc");
-// 02 Tube Mask and Sway
+// 02 Night Vision Picture (PiP)
+ATTR_TRI(RONIM_S_pipEnabled,"$STR_azeroot_ronim_main_pipEnabled","$STR_azeroot_ronim_main_pipEnabled_desc");
+class RONIM_S_pipResolution: Combo { property = "RONIM_S_pipResolution"; displayName = "$STR_azeroot_ronim_main_pipResolution"; tooltip = "$STR_azeroot_ronim_main_pipResolution_desc"; typeName = "NUMBER"; defaultValue = -1; class Values { class Keep { name = ECSTRING(main,keep); value = -1; }; class V512 { name = "$STR_azeroot_ronim_main_pipResolution_opt0"; value = 512; }; class V1024 { name = "$STR_azeroot_ronim_main_pipResolution_opt1"; value = 1024; }; class V2048 { name = "$STR_azeroot_ronim_main_pipResolution_opt2"; value = 2048; }; }; };
+ATTR_NUM(RONIM_S_pipForwardHip,"$STR_azeroot_ronim_main_pipForwardHip","$STR_azeroot_ronim_main_pipForwardHip_desc");
+ATTR_NUM(RONIM_S_pipForwardAds,"$STR_azeroot_ronim_main_pipForwardAds","$STR_azeroot_ronim_main_pipForwardAds_desc");
+ATTR_NUM(RONIM_S_pipFovScale,"$STR_azeroot_ronim_main_pipFovScale","$STR_azeroot_ronim_main_pipFovScale_desc");
+// 03 Tube Mask and Sway
 ATTR_TRI(RONIM_S_maskEnabled,"$STR_azeroot_ronim_main_maskEnabled","$STR_azeroot_ronim_main_maskEnabled_desc");
+class RONIM_S_maskSource: Combo { property = "RONIM_S_maskSource"; displayName = "$STR_azeroot_ronim_main_maskSource"; tooltip = "$STR_azeroot_ronim_main_maskSource_desc"; typeName = "NUMBER"; defaultValue = -1; class Values { class Keep { name = ECSTRING(main,keep); value = -1; }; class V0 { name = "$STR_azeroot_ronim_main_maskSource_opt0"; value = 0; }; class V1 { name = "$STR_azeroot_ronim_main_maskSource_opt1"; value = 1; }; class V2 { name = "$STR_azeroot_ronim_main_maskSource_opt2"; value = 2; }; class V3 { name = "$STR_azeroot_ronim_main_maskSource_opt3"; value = 3; }; }; };
+ATTR_TRI(RONIM_S_monoCustomMask,"$STR_azeroot_ronim_main_monoCustomMask","$STR_azeroot_ronim_main_monoCustomMask_desc");
+ATTR_NUM(RONIM_S_opticModelScale,"$STR_azeroot_ronim_main_opticModelScale","$STR_azeroot_ronim_main_opticModelScale_desc");
+ATTR_TRI(RONIM_S_maskOverHud,"$STR_azeroot_ronim_main_maskOverHud","$STR_azeroot_ronim_main_maskOverHud_desc");
 ATTR_NUM(RONIM_S_maskOpacity,"$STR_azeroot_ronim_main_maskOpacity","$STR_azeroot_ronim_main_maskOpacity_desc");
 ATTR_NUM(RONIM_S_maskScale,"$STR_azeroot_ronim_main_maskScale","$STR_azeroot_ronim_main_maskScale_desc");
 class RONIM_S_monoSide: Combo { property = "RONIM_S_monoSide"; displayName = "$STR_azeroot_ronim_main_monoSide"; tooltip = "$STR_azeroot_ronim_main_monoSide_desc"; typeName = "NUMBER"; defaultValue = -1; class Values { class Keep { name = ECSTRING(main,keep); value = -1; }; class V0 { name = "$STR_azeroot_ronim_main_monoSide_opt0"; value = 0; }; class V1 { name = "$STR_azeroot_ronim_main_monoSide_opt1"; value = 1; }; }; };
+class RONIM_S_monoOtherEye: Combo { property = "RONIM_S_monoOtherEye"; displayName = "$STR_azeroot_ronim_main_monoOtherEye"; tooltip = "$STR_azeroot_ronim_main_monoOtherEye_desc"; typeName = "NUMBER"; defaultValue = -1; class Values { class Keep { name = ECSTRING(main,keep); value = -1; }; class V0 { name = "$STR_azeroot_ronim_main_monoOtherEye_opt0"; value = 0; }; class V1 { name = "$STR_azeroot_ronim_main_monoOtherEye_opt1"; value = 1; }; }; };
 ATTR_NUM(RONIM_S_monoShift,"$STR_azeroot_ronim_main_monoShift","$STR_azeroot_ronim_main_monoShift_desc");
 ATTR_TRI(RONIM_S_swayEnabled,"$STR_azeroot_ronim_main_swayEnabled","$STR_azeroot_ronim_main_swayEnabled_desc");
 ATTR_NUM(RONIM_S_swayStrength,"$STR_azeroot_ronim_main_swayStrength","$STR_azeroot_ronim_main_swayStrength_desc");
@@ -20,7 +31,7 @@ ATTR_NUM(RONIM_S_swayStiffness,"$STR_azeroot_ronim_main_swayStiffness","$STR_aze
 ATTR_NUM(RONIM_S_swayDamping,"$STR_azeroot_ronim_main_swayDamping","$STR_azeroot_ronim_main_swayDamping_desc");
 ATTR_NUM(RONIM_S_swayMaxOffset,"$STR_azeroot_ronim_main_swayMaxOffset","$STR_azeroot_ronim_main_swayMaxOffset_desc");
 class RONIM_S_aceMaskMode: Combo { property = "RONIM_S_aceMaskMode"; displayName = "$STR_azeroot_ronim_main_aceMaskMode"; tooltip = "$STR_azeroot_ronim_main_aceMaskMode_desc"; typeName = "NUMBER"; defaultValue = -1; class Values { class Keep { name = ECSTRING(main,keep); value = -1; }; class V0 { name = "$STR_azeroot_ronim_main_aceMaskMode_opt0"; value = 0; }; class V1 { name = "$STR_azeroot_ronim_main_aceMaskMode_opt1"; value = 1; }; class V2 { name = "$STR_azeroot_ronim_main_aceMaskMode_opt2"; value = 2; }; }; };
-// 03 ADS Sway and Misalignment
+// 04 ADS Sway and Misalignment
 ATTR_TRI(RONIM_S_adsSwayEnabled,"$STR_azeroot_ronim_main_adsSwayEnabled","$STR_azeroot_ronim_main_adsSwayEnabled_desc");
 ATTR_NUM(RONIM_S_adsSwayStrength,"$STR_azeroot_ronim_main_adsSwayStrength","$STR_azeroot_ronim_main_adsSwayStrength_desc");
 ATTR_NUM(RONIM_S_recoilKick,"$STR_azeroot_ronim_main_recoilKick","$STR_azeroot_ronim_main_recoilKick_desc");
@@ -36,18 +47,18 @@ ATTR_NUM(RONIM_S_misalignRecoverDelay,"$STR_azeroot_ronim_main_misalignRecoverDe
 ATTR_NUM(RONIM_S_misalignRecoverTime,"$STR_azeroot_ronim_main_misalignRecoverTime","$STR_azeroot_ronim_main_misalignRecoverTime_desc");
 ATTR_TRI(RONIM_S_reseatAction,"$STR_azeroot_ronim_main_reseatAction","$STR_azeroot_ronim_main_reseatAction_desc");
 ATTR_NUM(RONIM_S_reseatTime,"$STR_azeroot_ronim_main_reseatTime","$STR_azeroot_ronim_main_reseatTime_desc");
-// 04 Mount Failure
+// 05 Mount Failure
 ATTR_TRI(RONIM_S_mountEnabled,"$STR_azeroot_ronim_main_mountEnabled","$STR_azeroot_ronim_main_mountEnabled_desc");
 ATTR_NUM(RONIM_S_mountChance,"$STR_azeroot_ronim_main_mountChance","$STR_azeroot_ronim_main_mountChance_desc");
 ATTR_TRI(RONIM_S_mountRecoilScale,"$STR_azeroot_ronim_main_mountRecoilScale","$STR_azeroot_ronim_main_mountRecoilScale_desc");
 ATTR_TRI(RONIM_S_mountNotify,"$STR_azeroot_ronim_main_mountNotify","$STR_azeroot_ronim_main_mountNotify_desc");
-// 05 Recoil Bruise
+// 06 Recoil Bruise
 ATTR_TRI(RONIM_S_bruiseEnabled,"$STR_azeroot_ronim_main_bruiseEnabled","$STR_azeroot_ronim_main_bruiseEnabled_desc");
 ATTR_NUM(RONIM_S_bruiseChance,"$STR_azeroot_ronim_main_bruiseChance","$STR_azeroot_ronim_main_bruiseChance_desc");
 ATTR_NUM(RONIM_S_bruiseDamage,"$STR_azeroot_ronim_main_bruiseDamage","$STR_azeroot_ronim_main_bruiseDamage_desc");
 ATTR_NUM(RONIM_S_bruiseCooldown,"$STR_azeroot_ronim_main_bruiseCooldown","$STR_azeroot_ronim_main_bruiseCooldown_desc");
 ATTR_TRI(RONIM_S_bruiseRecoilScale,"$STR_azeroot_ronim_main_bruiseRecoilScale","$STR_azeroot_ronim_main_bruiseRecoilScale_desc");
-// 06 Muzzle Flash Bloom
+// 07 Muzzle Flash Bloom
 ATTR_TRI(RONIM_S_flashEnabled,"$STR_azeroot_ronim_main_flashEnabled","$STR_azeroot_ronim_main_flashEnabled_desc");
 ATTR_TRI(RONIM_S_flashRequireMagnified,"$STR_azeroot_ronim_main_flashRequireMagnified","$STR_azeroot_ronim_main_flashRequireMagnified_desc");
 ATTR_NUM(RONIM_S_suppressorAudible,"$STR_azeroot_ronim_main_suppressorAudible","$STR_azeroot_ronim_main_suppressorAudible_desc");
@@ -57,14 +68,15 @@ ATTR_NUM(RONIM_S_flashStack,"$STR_azeroot_ronim_main_flashStack","$STR_azeroot_r
 ATTR_TRI(RONIM_S_flashNearby,"$STR_azeroot_ronim_main_flashNearby","$STR_azeroot_ronim_main_flashNearby_desc");
 ATTR_NUM(RONIM_S_flashNearbyRange,"$STR_azeroot_ronim_main_flashNearbyRange","$STR_azeroot_ronim_main_flashNearbyRange_desc");
 ATTR_NUM(RONIM_S_flashNearbyScale,"$STR_azeroot_ronim_main_flashNearbyScale","$STR_azeroot_ronim_main_flashNearbyScale_desc");
-// 07 Monocular Reticle
+// 08 Reticle
 ATTR_TRI(RONIM_S_reticleEnabled,"$STR_azeroot_ronim_main_reticleEnabled","$STR_azeroot_ronim_main_reticleEnabled_desc");
+ATTR_TRI(RONIM_S_reticleSideCopy,"$STR_azeroot_ronim_main_reticleSideCopy","$STR_azeroot_ronim_main_reticleSideCopy_desc");
 class RONIM_S_reticleStyle: Combo { property = "RONIM_S_reticleStyle"; displayName = "$STR_azeroot_ronim_main_reticleStyle"; tooltip = "$STR_azeroot_ronim_main_reticleStyle_desc"; typeName = "NUMBER"; defaultValue = -1; class Values { class Keep { name = ECSTRING(main,keep); value = -1; }; class V0 { name = "$STR_azeroot_ronim_main_reticleStyle_opt0"; value = 0; }; class V1 { name = "$STR_azeroot_ronim_main_reticleStyle_opt1"; value = 1; }; class V2 { name = "$STR_azeroot_ronim_main_reticleStyle_opt2"; value = 2; }; class V3 { name = "$STR_azeroot_ronim_main_reticleStyle_opt3"; value = 3; }; }; };
 ATTR_NUM(RONIM_S_reticleOffset,"$STR_azeroot_ronim_main_reticleOffset","$STR_azeroot_ronim_main_reticleOffset_desc");
 ATTR_NUM(RONIM_S_reticleSize,"$STR_azeroot_ronim_main_reticleSize","$STR_azeroot_ronim_main_reticleSize_desc");
 ATTR_NUM(RONIM_S_reticleOpacity,"$STR_azeroot_ronim_main_reticleOpacity","$STR_azeroot_ronim_main_reticleOpacity_desc");
 class RONIM_S_reticleColor: Combo { property = "RONIM_S_reticleColor"; displayName = "$STR_azeroot_ronim_main_reticleColor"; tooltip = "$STR_azeroot_ronim_main_reticleColor_desc"; typeName = "NUMBER"; defaultValue = -1; class Values { class Keep { name = ECSTRING(main,keep); value = -1; }; class V0 { name = "$STR_azeroot_ronim_main_reticleColor_opt0"; value = 0; }; class V1 { name = "$STR_azeroot_ronim_main_reticleColor_opt1"; value = 1; }; class V2 { name = "$STR_azeroot_ronim_main_reticleColor_opt2"; value = 2; }; class V3 { name = "$STR_azeroot_ronim_main_reticleColor_opt3"; value = 3; }; }; };
-// 08 Classes
+// 09 Classes
 ATTR_STR(RONIM_S_integratedWhitelist,"$STR_azeroot_ronim_main_integratedWhitelist","$STR_azeroot_ronim_main_integratedWhitelist_desc");
 ATTR_STR(RONIM_S_integratedBlacklist,"$STR_azeroot_ronim_main_integratedBlacklist","$STR_azeroot_ronim_main_integratedBlacklist_desc");
 ATTR_STR(RONIM_S_nvgMono,"$STR_azeroot_ronim_main_nvgMono","$STR_azeroot_ronim_main_nvgMono_desc");
@@ -74,7 +86,8 @@ ATTR_STR(RONIM_S_nvgIgnore,"$STR_azeroot_ronim_main_nvgIgnore","$STR_azeroot_ron
 ATTR_STR(RONIM_S_nvgImmune,"$STR_azeroot_ronim_main_nvgImmune","$STR_azeroot_ronim_main_nvgImmune_desc");
 ATTR_STR(RONIM_S_suppressorWhitelist,"$STR_azeroot_ronim_main_suppressorWhitelist","$STR_azeroot_ronim_main_suppressorWhitelist_desc");
 ATTR_STR(RONIM_S_suppressorBlacklist,"$STR_azeroot_ronim_main_suppressorBlacklist","$STR_azeroot_ronim_main_suppressorBlacklist_desc");
+ATTR_STR(RONIM_S_maskCalibration,"$STR_azeroot_ronim_main_maskCalibration","$STR_azeroot_ronim_main_maskCalibration_desc");
 ATTR_STR(RONIM_S_reticleMap,"$STR_azeroot_ronim_main_reticleMap","$STR_azeroot_ronim_main_reticleMap_desc");
-// 09 Debug
+// 10 Debug
 ATTR_TRI(RONIM_S_debugLog,"$STR_azeroot_ronim_main_debugLog","$STR_azeroot_ronim_main_debugLog_desc");
 ATTR_TRI(RONIM_S_debugOverlay,"$STR_azeroot_ronim_main_debugOverlay","$STR_azeroot_ronim_main_debugOverlay_desc");

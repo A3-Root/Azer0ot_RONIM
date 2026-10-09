@@ -57,7 +57,7 @@ if (_yawRate > 180) then { _yawRate = _yawRate - 360; };
 if (_yawRate < -180) then { _yawRate = _yawRate + 360; };
 _yawRate = ((_yawRate / _dt) max -400) min 400;
 private _pitchRate = (((asin (((_dir select 2) max -1) min 1)) - (asin (((_lastDir select 2) max -1) min 1))) / _dt) max -400 min 400;
-private _look = 0.00045 * MSET(swayLook);
+private _look = 0.0006 * MSET(swayLook);
 _tx = _tx - _yawRate * _look;
 _ty = _ty + _pitchRate * _look;
 
@@ -79,7 +79,7 @@ _ty = _ty + (sin (_t * 29 + 120) + 0.5 * sin (_t * 61) + 0.8 * sin (_t * 90)) * 
 
 // Independent ADS channel: out of step with the weapon sway so the tube and sight wander apart
 if (GVAR(optActive) && {MSET(adsSwayEnabled)}) then {
-    private _ads = 0.0036 * MSET(adsSwayStrength) * (1 + _fatigue * MSET(swayFatigue));
+    private _ads = 0.005 * MSET(adsSwayStrength) * (1 + _fatigue * MSET(swayFatigue));
     _tx = _tx + (sin (_t * 71 + 10) + 0.7 * sin (_t * 131 + 77) + 0.3 * sin (_t * 211)) * _ads;
     _ty = _ty + (sin (_t * 59 + 200) + 0.6 * sin (_t * 149 + 33)) * _ads;
 };

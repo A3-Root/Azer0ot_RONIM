@@ -13,7 +13,7 @@
  */
 
 hintSilent format [
-    "RONIM\nhmd: %1 (%2)\nnvg: %3  ads: %4\nzoom: %5  magnified: %6\nintegrated: %7  optic features: %8\nsway: %9\nmisalign: %10\nflash: %11",
+    "RONIM\nhmd: %1 (%2)\nnvg: %3  pip: %12  ads: %4\nzoom: %5  magnified: %6\nintegrated: %7  optic features: %8\nsway: %9\nmisalign: %10\nflash: %11",
     GVAR(hmd),
     TUBE_NAMES select GVAR(tube),
     GVAR(nvgOn),
@@ -24,5 +24,6 @@ hintSilent format [
     GVAR(optActive),
     (GVAR(swayPos) select [0, 2]) apply { _x toFixed 3 },
     (vectorMagnitude GVAR(misalign)) toFixed 3,
-    GVAR(flashLevel) toFixed 2
+    GVAR(flashLevel) toFixed 2,
+    GVAR(pipActive)
 ];

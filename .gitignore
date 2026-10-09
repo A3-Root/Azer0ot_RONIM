@@ -61,3 +61,6 @@ build/.env
 # =========================
 *.log
 *.rpt
+
+# RONIM generator cache
+tools/.cache/

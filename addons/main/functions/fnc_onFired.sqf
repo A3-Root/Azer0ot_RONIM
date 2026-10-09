@@ -34,7 +34,7 @@ if (!_opt) exitWith {};
 
 // Recoil knocks the tube, mostly upward
 if (MSET(adsSwayEnabled)) then {
-    private _kick = 0.12 * MSET(recoilKick) * _rf;
+    private _kick = 0.15 * MSET(recoilKick) * _rf;
     GVAR(swayVel) = GVAR(swayVel) vectorAdd [random [-0.6, 0, 0.6] * _kick, -(0.6 + random 0.6) * _kick, 0];
 };
 

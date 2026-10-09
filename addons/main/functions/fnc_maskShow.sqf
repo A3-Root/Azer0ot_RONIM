@@ -15,7 +15,8 @@
 params ["_show"];
 
 if (_show) then {
-    QGVAR(layer) cutRsc [QGVAR(display), "PLAIN", 0, false, false];
+    GVAR(displayOverHud) = MSET(maskOverHud);
+    QGVAR(layer) cutRsc [QGVAR(display), "PLAIN", 0, false, GVAR(displayOverHud)];
 } else {
     QGVAR(layer) cutText ["", "PLAIN"];
     if (GVAR(ppFlash) != -1) then {

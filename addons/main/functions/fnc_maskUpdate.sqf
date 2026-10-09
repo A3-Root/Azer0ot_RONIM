@@ -1,9 +1,13 @@
 #include "..\script_component.hpp"
 /*
  * Author: Root, Azer0
- * Lays out the NVG overlay for this frame: tube mask at its sway offset with black fillers
- * around it, muzzle flash bloom, monocular reticle copy. Hides ACE's static tube mask when the
- * RONIM mask replaces it.
+ * Lays out the NVG overlay for this frame.
+ * Tube group = the tube's box on screen (shifted by sway). Inside it: the PiP night vision picture
+ * (screen sized, shifted only by sway, so the picture moves against the real aim point), the
+ * flash bloom and the mask texture. Black fillers cover the rest of the screen, except for a
+ * monocular in PiP mode, where the other eye keeps the real view.
+ * Game NVG mode: no PiP picture; the mask covers the game's full screen night vision, and ACE's
+ * static mask is hidden when RONIM's replaces it.
  *
  * Arguments:
  * None
@@ -14,64 +18,113 @@
  * Public: No
  */
 
-// Aiming through an integrated NV optic shows the optic's own picture, no tube in front of it
-private _show = GVAR(nvgOn) && {!(GVAR(ads) && GVAR(integrated))};
+// First person only; aiming through an integrated NV optic shows the optic's own picture
+private _show = GVAR(nvgOn) && GVAR(firstPerson) && {!(GVAR(ads) && GVAR(integrated))};
 if (!_show) exitWith {
     if (GVAR(displayShown)) then { [false] call FUNC(maskShow); };
 };
 
 private _display = uiNamespace getVariable [QGVAR(display), displayNull];
+// Reopen when the layer changes between under and over the HUD
+if (!isNull _display && {GVAR(displayOverHud) isNotEqualTo MSET(maskOverHud)}) then {
+    [false] call FUNC(maskShow);
+    _display = displayNull;
+};
 if (isNull _display) then {
     [true] call FUNC(maskShow);
     _display = uiNamespace getVariable [QGVAR(display), displayNull];
 };
 if (isNull _display) exitWith {};
 
+private _pip = GVAR(pipActive);
+private _tube = GVAR(tube);
+private _mono = _tube == TUBE_MONO;
 private _aspect = getResolution select 4;
 private _unitX = (safeZoneW / safeZoneH) / _aspect; // UI width per UI height for square pixels
 private _cx = safeZoneX + safeZoneW / 2;
 private _cy = safeZoneY + safeZoneH / 2;
+private _pos = GVAR(swayPos);
+private _dx = (_pos select 0) * safeZoneH * _unitX;
+private _dy = (_pos select 1) * safeZoneH;
 
-// ------------------------------------------------------------------ tube mask
-private _aceMode = [0, MSET(aceMaskMode)] select GVAR(aceNvg);
+private _group = _display displayCtrl IDC_GROUP;
+private _picture = _group controlsGroupCtrl IDC_PIP;
+private _flash = _group controlsGroupCtrl IDC_FLASH;
+private _mask = _group controlsGroupCtrl IDC_MASK;
+private _fillers = [IDC_FILL_TOP, IDC_FILL_BOTTOM, IDC_FILL_LEFT, IDC_FILL_RIGHT] apply { _display displayCtrl _x };
+
+// ------------------------------------------------------------------ tube box
+private _aceMode = [0, MSET(aceMaskMode)] select (GVAR(aceNvg) && !_pip);
 private _drawMask = MSET(maskEnabled) && _aceMode != 1;
-private _maskCtrls = [IDC_MASK, IDC_FILL_TOP, IDC_FILL_BOTTOM, IDC_FILL_LEFT, IDC_FILL_RIGHT] apply { _display displayCtrl _x };
+private _box = [safeZoneXAbs, safeZoneY, safeZoneWAbs, safeZoneH];
 
 if (_drawMask) then {
-    _maskCtrls params ["_mask", "_top", "_bottom", "_left", "_right"];
-    private _tex = format ["%1mask_%2_ca.paa", TEX_ROOT, TUBE_NAMES select GVAR(tube)];
-    if (ctrlText _mask != _tex) then { _mask ctrlSetText _tex; };
-
-    private _h = safeZoneH * MSET(maskScale);
-    private _w = 2 * _h * _unitX;
-    private _pos = GVAR(swayPos);
-    private _mx = _cx + (_pos select 0) * safeZoneH * _unitX;
-    private _my = _cy + (_pos select 1) * safeZoneH;
-    if (GVAR(tube) == TUBE_MONO) then {
+    ([GVAR(hmd), _tube] call FUNC(getMaskInfo)) params ["_tex", "_kind", "_texAspect"];
+    ([GVAR(hmd), _kind] call FUNC(getCalibration)) params ["_calScale", "_calX", "_calY", "_calStretch"];
+    private _scale = _calScale * MSET(maskScale);
+    private _h = safeZoneH * _scale;
+    private _w = 0;
+    switch (_kind) do {
+        case "ace": {
+            // ACE's own layout: 3 screen heights tall, 0.75 of that wide, growing with zoom
+            private _screenY = (worldToScreen positionCameraToWorld [0, 1, 1]) param [1, 0.5];
+            private _aceZoom = ((0.5 - _screenY) * (getResolution select 5) * 1.12513) max 0.1;
+            _h = 3 * _h * _aceZoom;
+            _w = 0.75 * _h * _calStretch;
+        };
+        case "optic": { _w = _h * _unitX * _texAspect * _calStretch; };
+        default { _w = ([2, 1] select _mono) * _h * _unitX * _calStretch; };
+    };
+    private _mx = _cx + _dx + _calX * safeZoneW;
+    if (_mono) then {
         _mx = _mx + ([-1, 1] select (MSET(monoSide) == 1)) * MSET(monoShift) * safeZoneW;
     };
-    private _x0 = _mx - _w / 2;
-    private _y0 = _my - _h / 2;
+    _box = [_mx - _w / 2, _cy + _dy + _calY * safeZoneH - _h / 2, _w, _h];
+
+    if (ctrlText _mask != _tex) then { _mask ctrlSetText _tex; };
+    _mask ctrlSetPosition [0, 0, _w, _h];
+    _mask ctrlSetFade (1 - MSET(maskOpacity));
+    _mask ctrlShow true;
+    _mask ctrlCommit 0;
+} else {
+    _mask ctrlShow false;
+};
+_box params ["_x0", "_y0", "_w0", "_h0"];
+_group ctrlSetPosition _box;
+_group ctrlCommit 0;
+
+// Fillers: everything outside the box. A PiP monocular can leave the other eye with the real view.
+if (_drawMask && {!(_pip && _mono && MSET(monoOtherEye) == 1)}) then {
+    _fillers params ["_top", "_bottom", "_left", "_right"];
     private _big = 4;
-
-    _mask ctrlSetPosition [_x0, _y0, _w, _h];
     _top ctrlSetPosition [safeZoneXAbs - _big, _y0 - _big, safeZoneWAbs + 2 * _big, _big + 0.001];
-    _bottom ctrlSetPosition [safeZoneXAbs - _big, _y0 + _h - 0.001, safeZoneWAbs + 2 * _big, _big];
-    _left ctrlSetPosition [_x0 - _big, _y0, _big + 0.001, _h];
-    _right ctrlSetPosition [_x0 + _w - 0.001, _y0, _big, _h];
-
+    _bottom ctrlSetPosition [safeZoneXAbs - _big, _y0 + _h0 - 0.001, safeZoneWAbs + 2 * _big, _big];
+    _left ctrlSetPosition [_x0 - _big, _y0, _big + 0.001, _h0];
+    _right ctrlSetPosition [_x0 + _w0 - 0.001, _y0, _big, _h0];
     private _fade = 1 - MSET(maskOpacity);
     {
-        _x ctrlShow true;
         _x ctrlSetFade _fade;
+        _x ctrlShow true;
         _x ctrlCommit 0;
-    } forEach _maskCtrls;
+    } forEach _fillers;
 } else {
-    { _x ctrlShow false; } forEach _maskCtrls;
+    { _x ctrlShow false; } forEach _fillers;
 };
 
-// ACE draws its own fixed mask (controls 1001-1003); hide it when RONIM's replaces it
-if (_aceMode == 0 && _drawMask) then {
+// ------------------------------------------------------------------ PiP night vision picture
+if (_pip) then {
+    private _tex = format ["#(argb,%1,%1,1)r2t(%2,1.0)", MSET(pipResolution), PIP_TARGET];
+    if (ctrlText _picture != _tex) then { _picture ctrlSetText _tex; };
+    // Screen sized and world aligned, shifted by sway only (not by the monocular's eye offset)
+    _picture ctrlSetPosition [safeZoneX + _dx - _x0, safeZoneY + _dy - _y0, safeZoneW, safeZoneH];
+    _picture ctrlShow true;
+    _picture ctrlCommit 0;
+} else {
+    _picture ctrlShow false;
+};
+
+// ACE draws its own fixed mask (controls 1001-1003) in game NVG mode; hide it when RONIM's replaces it
+if (!_pip && _aceMode == 0 && _drawMask) then {
     private _ace = uiNamespace getVariable ["ace_nightvision_titleDisplay", displayNull];
     if (!isNull _ace) then {
         {
@@ -82,11 +135,13 @@ if (_aceMode == 0 && _drawMask) then {
 };
 
 // ------------------------------------------------------------------ muzzle flash bloom
-private _flash = _display displayCtrl IDC_FLASH;
 private _level = GVAR(flashLevel);
+_flash ctrlSetPosition [0, 0, _w0, _h0];
 _flash ctrlSetBackgroundColor [0.88, 1, 0.88, _level ^ 0.8];
+_flash ctrlCommit 0;
 
-if (_level > 0) then {
+// Game NVG mode also flares the 3D image itself; the PiP picture is not touched by post-process
+if (_level > 0 && !_pip) then {
     if (GVAR(ppFlash) == -1) then {
         private _priority = 1560;
         while {
@@ -111,22 +166,29 @@ if (_level > 0) then {
     };
 };
 
-// ------------------------------------------------------------------ monocular reticle copy
+// ------------------------------------------------------------------ reticle
+// PiP: the picture hides the scope, so the reticle sits on top at the aim point (screen centre).
+// Game mode: the real reticle is visible; a monocular gets a copy on the side without the tube.
 private _reticle = _display displayCtrl IDC_RETICLE;
-if (MSET(reticleEnabled) && GVAR(optActive) && GVAR(tube) == TUBE_MONO) then {
+private _side = 0;
+private _drawReticle = MSET(reticleEnabled) && GVAR(optActive);
+if (_drawReticle && !_pip) then {
+    _drawReticle = _mono && {MSET(reticleSideCopy)};
+    _side = ([1, -1] select (MSET(monoSide) == 1)) * MSET(reticleOffset) * safeZoneW;
+};
+
+if (_drawReticle) then {
     private _style = [GVAR(unit)] call FUNC(getReticleStyle);
     private _tex = format ["%1reticle_%2_ca.paa", TEX_ROOT, RETICLE_STYLES select _style];
     if (ctrlText _reticle != _tex) then { _reticle ctrlSetText _tex; };
 
     private _h = MSET(reticleSize) * safeZoneH;
     private _w = _h * _unitX;
-    private _side = [1, -1] select (MSET(monoSide) == 1);
-    private _rx = _cx + _side * MSET(reticleOffset) * safeZoneW;
     private _color = +([[1, 0.15, 0.1], [0.25, 1, 0.25], [1, 0.7, 0.1], [0, 0, 0]] select MSET(reticleColor));
     _color pushBack MSET(reticleOpacity);
 
     _reticle ctrlSetTextColor _color;
-    _reticle ctrlSetPosition [_rx - _w / 2, _cy - _h / 2, _w, _h];
+    _reticle ctrlSetPosition [_cx + _side - _w / 2, _cy - _h / 2, _w, _h];
     _reticle ctrlShow true;
     _reticle ctrlCommit 0;
 } else {

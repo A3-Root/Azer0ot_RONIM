@@ -22,6 +22,23 @@ GVAR(zoom) = 1;
 GVAR(magnified) = false;
 GVAR(integrated) = false;
 GVAR(optActive) = false;
+GVAR(firstPerson) = true;
+
+// PiP night vision: RONIM's own NVG on/off state while the game's NVG mode stays off
+GVAR(pipActive) = false;
+GVAR(pipUsed) = false;
+GVAR(nvRequested) = false;
+GVAR(engineOurs) = false;
+GVAR(engineCmdUntil) = 0;
+GVAR(pipMode) = false;
+GVAR(lastNvKey) = -1e6;
+GVAR(lastVision) = 0;
+GVAR(displayOverHud) = false;
+
+// Mask calibration of this player, per NVG class: [scale, offsetX, offsetY, stretch]
+GVAR(calibProfile) = createHashMapFromArray (profileNamespace getVariable [QGVAR(calibration), []]);
+GVAR(calibSaveAt) = 0;
+GVAR(cam) = objNull;
 
 // Sway and effect state. Offsets are fractions of screen height, [x, y, 0], y down.
 GVAR(swayPos) = [0, 0, 0];
@@ -51,5 +68,26 @@ GVAR(ehFiredNear) = -1;
     GVAR(swayPos) = [0, 0, 0];
     GVAR(swayVel) = [0, 0, 0];
 }, true] call CBA_fnc_addPlayerEventHandler;
+
+// The NVG key itself, so PiP mode does not depend on reading the game's NVG mode back
+addUserActionEventHandler ["nightVision", "Activate", { call FUNC(onNvKey) }];
+
+// Mask calibration keybinds (Ctrl+Alt+Numpad by default), repeat while held
+private _category = localize LSTRING(kb_category);
+{
+    _x params ["_action", "_key"];
+    [
+        _category,
+        QGVAR(calib_) + _action,
+        localize format ["STR_azeroot_ronim_main_kb_%1", _action],
+        compile format ["['%1'] call %2", _action, QFUNC(calibrate)],
+        {},
+        [_key, [false, true, true]],
+        _action != "reset"
+    ] call CBA_fnc_addKeybind;
+} forEach [
+    ["scaleUp", 78], ["scaleDown", 74], ["up", 72], ["down", 80],
+    ["left", 75], ["right", 77], ["wider", 73], ["narrower", 71], ["reset", 76]
+];
 
 [FUNC(tick), 0] call CBA_fnc_addPerFrameHandler;

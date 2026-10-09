@@ -15,39 +15,54 @@ Runtime overrides from the Zeus/3DEN **RONIM Settings** modules or `azeroot_roni
 | Magnification threshold | `magThreshold` | 1.5 | 1 - 8 | Zoom at or above which an optic counts as magnified. Optic features (mount failure, bruise, ADS sway, misalignment, flash bloom, monocular reticle) need this. Iron sights and holo sights sit around 1.0-1.3x. |
 | Auto-detect integrated NV optics | `autoDetectIntegrated` | on |  | Optics whose own vision modes include NVG or thermal never get the optic features. Off = only the Classes > Integrated NV optics list counts. |
 
+## Night Vision Picture (PiP)
+
+| Setting | Name | Default | Range / options | What it does |
+|---|---|---|---|---|
+| PiP night vision | `pipEnabled` | off |  | In first person, RONIM renders the night vision itself in a picture-in-picture view inside the tubes and keeps the game's own NVG mode off (no vanilla/ACE tube overlay). A monocular leaves the other eye with the real view. Needs PiP enabled in video options. Third person and disabled PiP fall back to the game's NVG mode. Off = the game's NVG mode with RONIM's tube overlay drawn in front of it. |
+| PiP resolution *(per player)* | `pipResolution` | 1024 | 512 / 1024 / 2048 | Render resolution of the night vision picture. Higher = sharper, costs more FPS. |
+| Camera offset (hip) | `pipForwardHip` | 0.22 | 0 - 0.6 | Metres the night vision camera sits ahead of your eye when not aiming, so it does not see the inside of the goggles or helmet. |
+| Camera offset (aiming) | `pipForwardAds` | 0.5 | 0 - 1.5 | Metres the night vision camera sits ahead of the optic while aiming, past the scope body. |
+| PiP field of view *(per player)* | `pipFovScale` | 1 | 0.8 - 1.25 | Fine-tunes the night vision picture's field of view against the real view. Above 1 = wider, below 1 = narrower. |
+
 ## Tube Mask and Sway
 
 | Setting | Name | Default | Range / options | What it does |
 |---|---|---|---|---|
-| Draw NVG tube mask | `maskEnabled` | on |  | Black out everything outside the NVG tube(s) while NVGs are on. Off = full screen night vision (sway then has nothing to move). |
+| Draw NVG tube mask | `maskEnabled` | on |  | Black out everything outside the NVG tube(s) while NVGs are on. Off = full screen night vision. |
+| Tube shape source | `maskSource` | Auto | Auto / NVG optic texture / ACE border texture / RONIM generic | Where the tube mask's shape comes from. Auto: the NVG's own optic overlay texture (from RONIM's NVG compat addons or found next to its modelOptics), else its ACE border texture, else RONIM's. Size and position per NVG come from Classes > Mask calibration and the calibration keybinds. |
+| Custom monocular mask | `monoCustomMask` | on |  | Monocular NVGs always use RONIM's monocular mask: one tube in front of the chosen eye, the rest dark, whatever the NVG's own overlay looks like. |
+| Optic overlay scale | `opticModelScale` | 19.41 | 2 - 60 | Screen heights per optic model unit, used to size NVG overlays from their real model geometry (NVG compat addons). Calibrate one NVG, then every NVG overlay is sized correctly relative to it. The calibration hint shows the value. |
+| Mask in front *(per player)* | `maskOverHud` | on |  | Draw the tube overlay over the HUD layer, in front of the NVG's own optic overlay. Covers HUD elements in the blacked out area while NVGs are on. Off = under the HUD. |
 | Mask opacity *(per player)* | `maskOpacity` | 100% | 50-100% | How dark the area outside the tubes is. Lower = you can see a little around the tubes. |
 | Tube size *(per player)* | `maskScale` | 1 | 0.6 - 1.6 | Size of the tube view. Higher = larger tubes, less blacked out. |
-| Monocular eye | `monoSide` | Left eye (reticle right) | Left eye (reticle right) / Right eye (reticle left) | Which eye a monocular NVG sits in front of. The monocular reticle appears on the other side. |
-| Monocular tube shift | `monoShift` | 0.16 | 0 - 0.35 | How far a monocular tube sits off centre, as a fraction of screen width. 0 = centred. |
+| Monocular eye | `monoSide` | Right eye | Left eye / Right eye | Which eye a monocular NVG sits in front of. |
+| Monocular other eye | `monoOtherEye` | Real view (PiP) | Dark / Real view (PiP) | What the eye without the tube sees. Real view needs PiP night vision; in the game's NVG mode the other eye is always dark. |
+| Monocular tube shift | `monoShift` | 0.25 | 0 - 0.4 | How far a monocular tube sits off centre, as a fraction of screen width. 0 = centred. |
 | Tube sway | `swayEnabled` | on |  | The tube view lags and bobs with head movement, walking and fatigue. Off = tube fixed to the screen centre. |
-| Sway strength | `swayStrength` | 1 | 0 - 3 | Overall multiplier for all tube sway. 2.0 = twice the movement, 0.5 = half. |
-| Head turn lag | `swayLook` | 1 | 0 - 3 | How much the tube lags behind when you turn your head. |
-| Walking bob | `swayMove` | 1 | 0 - 3 | How much the tube bobs while moving. Scales with speed, less when crouched or prone. |
-| Idle drift | `swayIdle` | 1 | 0 - 3 | Slow drift while standing still. |
-| Fatigue effect | `swayFatigue` | 1 | 0 - 3 | Extra drift when tired. 0 = fatigue has no effect. |
-| Mount stiffness | `swayStiffness` | 22 | 5 - 60 | How firmly the mount pulls the tube back to centre. Higher = snappier, smaller swings. Lower = looser, wobblier. |
+| Sway strength | `swayStrength` | 1.6 | 0 - 6 | Overall multiplier for all tube sway. 2.0 = twice the movement, 0.5 = half. |
+| Head turn lag | `swayLook` | 1.5 | 0 - 5 | How much the tube lags behind when you turn your head. |
+| Walking bob | `swayMove` | 1.5 | 0 - 5 | How much the tube bobs while moving. Scales with speed, less when crouched or prone. |
+| Idle drift | `swayIdle` | 1.3 | 0 - 5 | Slow drift while standing still. |
+| Fatigue effect | `swayFatigue` | 1 | 0 - 5 | Extra drift when tired. 0 = fatigue has no effect. |
+| Mount stiffness | `swayStiffness` | 16 | 3 - 60 | How firmly the mount pulls the tube back to centre. Higher = snappier, smaller swings. Lower = looser, wobblier. |
 | Mount damping | `swayDamping` | 7 | 1 - 20 | How quickly wobbles die out. Higher = settles fast. Lower = keeps bouncing. |
-| Max sway offset | `swayMaxOffset` | 0.06 | 0.01 - 0.2 | Furthest the tube may sway from centre, as a fraction of screen height. |
-| ACE NVG mask handling | `aceMaskMode` | RONIM mask | RONIM mask / ACE mask / Both | Only with ACE Nightvision loaded, which draws its own static tube mask. RONIM mask hides the ACE mask; ACE mask keeps ACE's and turns RONIM's off (no tube sway); Both draws both. |
+| Max sway offset | `swayMaxOffset` | 0.12 | 0.01 - 0.4 | Furthest the tube may sway from centre, as a fraction of screen height. |
+| ACE NVG mask handling | `aceMaskMode` | RONIM mask | RONIM mask / ACE mask / Both | Only with ACE Nightvision loaded and the game's NVG mode in use (PiP off / third person). RONIM mask hides the ACE mask; ACE mask keeps ACE's and turns RONIM's off (no tube sway); Both draws both. |
 
 ## ADS Sway and Misalignment
 
 | Setting | Name | Default | Range / options | What it does |
 |---|---|---|---|---|
 | Independent ADS sway | `adsSwayEnabled` | on |  | While aiming through a magnified optic with NVGs on, the tube sways on its own, out of step with the weapon, and recoil kicks it. Only while aiming through a magnified optic (above the General magnification threshold) with NVGs on. |
-| ADS sway strength | `adsSwayStrength` | 1.5 | 0 - 4 | Size of the independent tube sway while aiming. 2.0 = twice the movement, 0 = none. |
-| Recoil kick | `recoilKick` | 1 | 0 - 4 | How hard each shot knocks the tube. Scales with the round's power. |
+| ADS sway strength | `adsSwayStrength` | 3 | 0 - 8 | Size of the independent tube sway while aiming. 2.0 = twice the movement, 0 = none. |
+| Recoil kick | `recoilKick` | 2 | 0 - 8 | How hard each shot knocks the tube. Scales with the round's power. |
 | Recoil camera shake | `recoilCamShake` | 0 | 0 - 5 | Extra camera shake per shot while aiming with NVGs. 0 = off. |
 | Weapon sway multiplier | `adsAimMult` | 1 | 1 - 3 | Weapon sway multiplier while aiming through a magnified optic with NVGs on (uses ACE sway factors with ACE). 1.0 = no change, 1.5 = 50% more sway. |
 | Mount misalignment | `misalignEnabled` | on |  | Shots can shift the NVG mount so the tube sits off centre until it recovers or is re-seated. Only while aiming through a magnified optic (above the General magnification threshold) with NVGs on. |
 | Misalignment chance per shot | `misalignChance` | 5% | 0-100% | Chance that one shot shifts the mount. Scales with the round's power. |
-| Misalignment per shift | `misalignStep` | 0.012 | 0.002 - 0.05 | How far one shift moves the tube, as a fraction of screen height. |
-| Max misalignment | `misalignMax` | 0.06 | 0.01 - 0.15 | Furthest the mount can end up off centre, as a fraction of screen height. |
+| Misalignment per shift | `misalignStep` | 0.015 | 0.002 - 0.08 | How far one shift moves the tube, as a fraction of screen height. |
+| Max misalignment | `misalignMax` | 0.08 | 0.01 - 0.3 | Furthest the mount can end up off centre, as a fraction of screen height. |
 | NVG toggle re-seats | `misalignToggleReset` | on |  | Turning the NVGs off and on again clears the misalignment. |
 | Auto recover | `misalignAutoRecover` | on |  | The mount settles back by itself after you stop shooting. |
 | Auto recover delay | `misalignRecoverDelay` | 2 | 0 - 30 | Seconds without firing before the mount starts settling back. |
@@ -70,7 +85,7 @@ Runtime overrides from the Zeus/3DEN **RONIM Settings** modules or `azeroot_roni
 |---|---|---|---|---|
 | Recoil bruising | `bruiseEnabled` | on |  | Shots can knock the NVG into your face and bruise your head (ACE medical: contusion). Only while aiming through a magnified optic (above the General magnification threshold) with NVGs on. |
 | Bruise chance per shot | `bruiseChance` | 10% | 0-100% | Chance that one shot bruises you (outside the cooldown). |
-| Bruise damage | `bruiseDamage` | 0.1 | 0.01 - 0.34 | Damage of one bruise. ACE: below 0.35 gives a contusion. |
+| Bruise damage | `bruiseDamage` | 0.15 | 0.1 - 0.34 | Damage of one bruise. ACE needs at least 0.1 for a wound; below 0.35 it is a contusion or crush. |
 | Bruise cooldown | `bruiseCooldown` | 15 | 0 - 120 | Minimum seconds between two bruises. |
 | Scale with recoil | `bruiseRecoilScale` | on |  | Powerful rounds bruise more often and harder. |
 
@@ -88,13 +103,14 @@ Runtime overrides from the Zeus/3DEN **RONIM Settings** modules or `azeroot_roni
 | Nearby range | `flashNearbyRange` | 15 | 2 - 50 | Distance in metres within which other shooters cause bloom. Fades with distance. |
 | Nearby intensity | `flashNearbyScale` | 60% | 0-100% | Bloom from another shooter at point blank, relative to your own shot. |
 
-## Monocular Reticle
+## Reticle
 
 | Setting | Name | Default | Range / options | What it does |
 |---|---|---|---|---|
-| Monocular reticle | `reticleEnabled` | on |  | With a monocular NVG, the naked eye still sees the scope: a copy of the reticle is drawn on the side without the tube. Only while aiming through a magnified optic (above the General magnification threshold) with NVGs on. |
+| Reticle over night vision | `reticleEnabled` | on |  | PiP: the night vision picture covers the scope, so a copy of the optic's reticle is drawn at the aim point on top of it. Tube sway and misalignment move the picture against it. Only while aiming through a magnified optic (above the General magnification threshold) with NVGs on. |
+| Monocular side copy | `reticleSideCopy` | on |  | Game NVG mode only (PiP off / third person): with a monocular, draw a copy of the reticle on the side without the tube. |
 | Default reticle | `reticleStyle` | Cross | Dot / Cross / Chevron / Mil-dot | Reticle drawn when the optic has no entry in Classes > Reticle per optic. |
-| Reticle offset | `reticleOffset` | 0.22 | 0.05 - 0.45 | Horizontal distance from screen centre, as a fraction of screen width. |
+| Reticle offset | `reticleOffset` | 0.22 | 0.05 - 0.45 | Monocular side copy: horizontal distance from screen centre, as a fraction of screen width. |
 | Reticle size *(per player)* | `reticleSize` | 0.14 | 0.02 - 0.4 | Reticle size as a fraction of screen height. |
 | Reticle opacity *(per player)* | `reticleOpacity` | 80% | 10-100% | How visible the reticle copy is. |
 | Reticle colour *(per player)* | `reticleColor` | Red | Red / Green / Amber / Black | Colour of the reticle copy. |
@@ -112,6 +128,7 @@ Runtime overrides from the Zeus/3DEN **RONIM Settings** modules or `azeroot_roni
 | Unbreakable mounts | `nvgImmune` | (empty) |  | NVG classes that never fall off (mount failure). Comma separated classnames, case insensitive. |
 | Always suppressor | `suppressorWhitelist` | (empty) |  | Muzzle attachments always counted as suppressors (no bloom). Comma separated classnames, case insensitive. |
 | Never suppressor | `suppressorBlacklist` | (empty) |  | Muzzle attachments never counted as suppressors (bloom). Comma separated classnames, case insensitive. |
+| Mask calibration | `maskCalibration` | (empty) |  | Tube mask size and position per NVG as class:scale:offsetX:offsetY:stretch entries, comma separated. Scale = mask height in screen heights, offsets in screen fractions, stretch = width multiplier. Tune in game with the RONIM calibration keybinds (saved per player); the hint shows the entry to paste here. |
 | Reticle per optic | `reticleMap` | (empty) |  | Monocular reticle per optic as class:style pairs, styles dot, cross, chevron, mildot. Example: optic_Hamr:chevron, optic_Arco:chevron, optic_MRCO:dot |
 
 ## Debug

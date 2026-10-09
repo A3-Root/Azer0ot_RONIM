@@ -3,6 +3,7 @@
 // Modules/API may layer runtime overrides on top (azeroot_ronim_fnc_setOverride).
 #define CAT LSTRING(cat)
 #define SUB_GENERAL [CAT, LSTRING(cat_general)]
+#define SUB_PIP [CAT, LSTRING(cat_pip)]
 #define SUB_MASK [CAT, LSTRING(cat_mask)]
 #define SUB_ADS [CAT, LSTRING(cat_ads)]
 #define SUB_MOUNT [CAT, LSTRING(cat_mount)]
@@ -18,33 +19,45 @@
 [QGVAR(magThreshold), "SLIDER", [LSTRING(magThreshold), LSTRING(magThreshold_desc)], SUB_GENERAL, [1, 8, 1.5, 2], true] call CBA_fnc_addSetting;
 [QGVAR(autoDetectIntegrated), "CHECKBOX", [LSTRING(autoDetectIntegrated), LSTRING(autoDetectIntegrated_desc)], SUB_GENERAL, true, true] call CBA_fnc_addSetting;
 
-// ---------------------------------------------------------------- 02 Tube Mask and Sway
+// ---------------------------------------------------------------- 02 Night Vision Picture (PiP)
+[QGVAR(pipEnabled), "CHECKBOX", [LSTRING(pipEnabled), LSTRING(pipEnabled_desc)], SUB_PIP, false, true] call CBA_fnc_addSetting;
+[QGVAR(pipResolution), "LIST", [LSTRING(pipResolution), LSTRING(pipResolution_desc)], SUB_PIP, [[512, 1024, 2048], [[LSTRING(pipResolution_opt0)], [LSTRING(pipResolution_opt1)], [LSTRING(pipResolution_opt2)]], 1], false] call CBA_fnc_addSetting;
+[QGVAR(pipForwardHip), "SLIDER", [LSTRING(pipForwardHip), LSTRING(pipForwardHip_desc)], SUB_PIP, [0, 0.6, 0.22, 2], true] call CBA_fnc_addSetting;
+[QGVAR(pipForwardAds), "SLIDER", [LSTRING(pipForwardAds), LSTRING(pipForwardAds_desc)], SUB_PIP, [0, 1.5, 0.5, 2], true] call CBA_fnc_addSetting;
+[QGVAR(pipFovScale), "SLIDER", [LSTRING(pipFovScale), LSTRING(pipFovScale_desc)], SUB_PIP, [0.8, 1.25, 1, 3], false] call CBA_fnc_addSetting;
+
+// ---------------------------------------------------------------- 03 Tube Mask and Sway
 [QGVAR(maskEnabled), "CHECKBOX", [LSTRING(maskEnabled), LSTRING(maskEnabled_desc)], SUB_MASK, true, true] call CBA_fnc_addSetting;
+[QGVAR(maskSource), "LIST", [LSTRING(maskSource), LSTRING(maskSource_desc)], SUB_MASK, [[0, 1, 2, 3], [[LSTRING(maskSource_opt0)], [LSTRING(maskSource_opt1)], [LSTRING(maskSource_opt2)], [LSTRING(maskSource_opt3)]], 0], true] call CBA_fnc_addSetting;
+[QGVAR(monoCustomMask), "CHECKBOX", [LSTRING(monoCustomMask), LSTRING(monoCustomMask_desc)], SUB_MASK, true, true] call CBA_fnc_addSetting;
+[QGVAR(opticModelScale), "SLIDER", [LSTRING(opticModelScale), LSTRING(opticModelScale_desc)], SUB_MASK, [2, 60, 19.41, 2], true] call CBA_fnc_addSetting;
+[QGVAR(maskOverHud), "CHECKBOX", [LSTRING(maskOverHud), LSTRING(maskOverHud_desc)], SUB_MASK, true, false] call CBA_fnc_addSetting;
 [QGVAR(maskOpacity), "SLIDER", [LSTRING(maskOpacity), LSTRING(maskOpacity_desc)], SUB_MASK, [0.5, 1, 1, 2, true], false] call CBA_fnc_addSetting;
 [QGVAR(maskScale), "SLIDER", [LSTRING(maskScale), LSTRING(maskScale_desc)], SUB_MASK, [0.6, 1.6, 1, 2], false] call CBA_fnc_addSetting;
-[QGVAR(monoSide), "LIST", [LSTRING(monoSide), LSTRING(monoSide_desc)], SUB_MASK, [[0, 1], [[LSTRING(monoSide_opt0)], [LSTRING(monoSide_opt1)]], 0], true] call CBA_fnc_addSetting;
-[QGVAR(monoShift), "SLIDER", [LSTRING(monoShift), LSTRING(monoShift_desc)], SUB_MASK, [0, 0.35, 0.16, 2], true] call CBA_fnc_addSetting;
+[QGVAR(monoSide), "LIST", [LSTRING(monoSide), LSTRING(monoSide_desc)], SUB_MASK, [[0, 1], [[LSTRING(monoSide_opt0)], [LSTRING(monoSide_opt1)]], 1], true] call CBA_fnc_addSetting;
+[QGVAR(monoOtherEye), "LIST", [LSTRING(monoOtherEye), LSTRING(monoOtherEye_desc)], SUB_MASK, [[0, 1], [[LSTRING(monoOtherEye_opt0)], [LSTRING(monoOtherEye_opt1)]], 1], true] call CBA_fnc_addSetting;
+[QGVAR(monoShift), "SLIDER", [LSTRING(monoShift), LSTRING(monoShift_desc)], SUB_MASK, [0, 0.4, 0.25, 2], true] call CBA_fnc_addSetting;
 [QGVAR(swayEnabled), "CHECKBOX", [LSTRING(swayEnabled), LSTRING(swayEnabled_desc)], SUB_MASK, true, true] call CBA_fnc_addSetting;
-[QGVAR(swayStrength), "SLIDER", [LSTRING(swayStrength), LSTRING(swayStrength_desc)], SUB_MASK, [0, 3, 1, 2], true] call CBA_fnc_addSetting;
-[QGVAR(swayLook), "SLIDER", [LSTRING(swayLook), LSTRING(swayLook_desc)], SUB_MASK, [0, 3, 1, 2], true] call CBA_fnc_addSetting;
-[QGVAR(swayMove), "SLIDER", [LSTRING(swayMove), LSTRING(swayMove_desc)], SUB_MASK, [0, 3, 1, 2], true] call CBA_fnc_addSetting;
-[QGVAR(swayIdle), "SLIDER", [LSTRING(swayIdle), LSTRING(swayIdle_desc)], SUB_MASK, [0, 3, 1, 2], true] call CBA_fnc_addSetting;
-[QGVAR(swayFatigue), "SLIDER", [LSTRING(swayFatigue), LSTRING(swayFatigue_desc)], SUB_MASK, [0, 3, 1, 2], true] call CBA_fnc_addSetting;
-[QGVAR(swayStiffness), "SLIDER", [LSTRING(swayStiffness), LSTRING(swayStiffness_desc)], SUB_MASK, [5, 60, 22, 0], true] call CBA_fnc_addSetting;
+[QGVAR(swayStrength), "SLIDER", [LSTRING(swayStrength), LSTRING(swayStrength_desc)], SUB_MASK, [0, 6, 1.6, 2], true] call CBA_fnc_addSetting;
+[QGVAR(swayLook), "SLIDER", [LSTRING(swayLook), LSTRING(swayLook_desc)], SUB_MASK, [0, 5, 1.5, 2], true] call CBA_fnc_addSetting;
+[QGVAR(swayMove), "SLIDER", [LSTRING(swayMove), LSTRING(swayMove_desc)], SUB_MASK, [0, 5, 1.5, 2], true] call CBA_fnc_addSetting;
+[QGVAR(swayIdle), "SLIDER", [LSTRING(swayIdle), LSTRING(swayIdle_desc)], SUB_MASK, [0, 5, 1.3, 2], true] call CBA_fnc_addSetting;
+[QGVAR(swayFatigue), "SLIDER", [LSTRING(swayFatigue), LSTRING(swayFatigue_desc)], SUB_MASK, [0, 5, 1, 2], true] call CBA_fnc_addSetting;
+[QGVAR(swayStiffness), "SLIDER", [LSTRING(swayStiffness), LSTRING(swayStiffness_desc)], SUB_MASK, [3, 60, 16, 0], true] call CBA_fnc_addSetting;
 [QGVAR(swayDamping), "SLIDER", [LSTRING(swayDamping), LSTRING(swayDamping_desc)], SUB_MASK, [1, 20, 7, 1], true] call CBA_fnc_addSetting;
-[QGVAR(swayMaxOffset), "SLIDER", [LSTRING(swayMaxOffset), LSTRING(swayMaxOffset_desc)], SUB_MASK, [0.01, 0.2, 0.06, 3], true] call CBA_fnc_addSetting;
+[QGVAR(swayMaxOffset), "SLIDER", [LSTRING(swayMaxOffset), LSTRING(swayMaxOffset_desc)], SUB_MASK, [0.01, 0.4, 0.12, 3], true] call CBA_fnc_addSetting;
 [QGVAR(aceMaskMode), "LIST", [LSTRING(aceMaskMode), LSTRING(aceMaskMode_desc)], SUB_MASK, [[0, 1, 2], [[LSTRING(aceMaskMode_opt0)], [LSTRING(aceMaskMode_opt1)], [LSTRING(aceMaskMode_opt2)]], 0], true] call CBA_fnc_addSetting;
 
-// ---------------------------------------------------------------- 03 ADS Sway and Misalignment
+// ---------------------------------------------------------------- 04 ADS Sway and Misalignment
 [QGVAR(adsSwayEnabled), "CHECKBOX", [LSTRING(adsSwayEnabled), LSTRING(adsSwayEnabled_desc)], SUB_ADS, true, true] call CBA_fnc_addSetting;
-[QGVAR(adsSwayStrength), "SLIDER", [LSTRING(adsSwayStrength), LSTRING(adsSwayStrength_desc)], SUB_ADS, [0, 4, 1.5, 2], true] call CBA_fnc_addSetting;
-[QGVAR(recoilKick), "SLIDER", [LSTRING(recoilKick), LSTRING(recoilKick_desc)], SUB_ADS, [0, 4, 1, 2], true] call CBA_fnc_addSetting;
+[QGVAR(adsSwayStrength), "SLIDER", [LSTRING(adsSwayStrength), LSTRING(adsSwayStrength_desc)], SUB_ADS, [0, 8, 3, 2], true] call CBA_fnc_addSetting;
+[QGVAR(recoilKick), "SLIDER", [LSTRING(recoilKick), LSTRING(recoilKick_desc)], SUB_ADS, [0, 8, 2, 2], true] call CBA_fnc_addSetting;
 [QGVAR(recoilCamShake), "SLIDER", [LSTRING(recoilCamShake), LSTRING(recoilCamShake_desc)], SUB_ADS, [0, 5, 0, 1], true] call CBA_fnc_addSetting;
 [QGVAR(adsAimMult), "SLIDER", [LSTRING(adsAimMult), LSTRING(adsAimMult_desc)], SUB_ADS, [1, 3, 1, 2], true] call CBA_fnc_addSetting;
 [QGVAR(misalignEnabled), "CHECKBOX", [LSTRING(misalignEnabled), LSTRING(misalignEnabled_desc)], SUB_ADS, true, true] call CBA_fnc_addSetting;
 [QGVAR(misalignChance), "SLIDER", [LSTRING(misalignChance), LSTRING(misalignChance_desc)], SUB_ADS, [0, 1, 0.05, 1, true], true] call CBA_fnc_addSetting;
-[QGVAR(misalignStep), "SLIDER", [LSTRING(misalignStep), LSTRING(misalignStep_desc)], SUB_ADS, [0.002, 0.05, 0.012, 3], true] call CBA_fnc_addSetting;
-[QGVAR(misalignMax), "SLIDER", [LSTRING(misalignMax), LSTRING(misalignMax_desc)], SUB_ADS, [0.01, 0.15, 0.06, 3], true] call CBA_fnc_addSetting;
+[QGVAR(misalignStep), "SLIDER", [LSTRING(misalignStep), LSTRING(misalignStep_desc)], SUB_ADS, [0.002, 0.08, 0.015, 3], true] call CBA_fnc_addSetting;
+[QGVAR(misalignMax), "SLIDER", [LSTRING(misalignMax), LSTRING(misalignMax_desc)], SUB_ADS, [0.01, 0.3, 0.08, 3], true] call CBA_fnc_addSetting;
 [QGVAR(misalignToggleReset), "CHECKBOX", [LSTRING(misalignToggleReset), LSTRING(misalignToggleReset_desc)], SUB_ADS, true, true] call CBA_fnc_addSetting;
 [QGVAR(misalignAutoRecover), "CHECKBOX", [LSTRING(misalignAutoRecover), LSTRING(misalignAutoRecover_desc)], SUB_ADS, true, true] call CBA_fnc_addSetting;
 [QGVAR(misalignRecoverDelay), "SLIDER", [LSTRING(misalignRecoverDelay), LSTRING(misalignRecoverDelay_desc)], SUB_ADS, [0, 30, 2, 1], true] call CBA_fnc_addSetting;
@@ -52,20 +65,20 @@
 [QGVAR(reseatAction), "CHECKBOX", [LSTRING(reseatAction), LSTRING(reseatAction_desc)], SUB_ADS, true, true] call CBA_fnc_addSetting;
 [QGVAR(reseatTime), "SLIDER", [LSTRING(reseatTime), LSTRING(reseatTime_desc)], SUB_ADS, [1, 20, 5.5, 1], true] call CBA_fnc_addSetting;
 
-// ---------------------------------------------------------------- 04 Mount Failure
+// ---------------------------------------------------------------- 05 Mount Failure
 [QGVAR(mountEnabled), "CHECKBOX", [LSTRING(mountEnabled), LSTRING(mountEnabled_desc)], SUB_MOUNT, true, true] call CBA_fnc_addSetting;
 [QGVAR(mountChance), "SLIDER", [LSTRING(mountChance), LSTRING(mountChance_desc)], SUB_MOUNT, [0, 0.2, 0.002, 1, true], true] call CBA_fnc_addSetting;
 [QGVAR(mountRecoilScale), "CHECKBOX", [LSTRING(mountRecoilScale), LSTRING(mountRecoilScale_desc)], SUB_MOUNT, true, true] call CBA_fnc_addSetting;
 [QGVAR(mountNotify), "CHECKBOX", [LSTRING(mountNotify), LSTRING(mountNotify_desc)], SUB_MOUNT, true, true] call CBA_fnc_addSetting;
 
-// ---------------------------------------------------------------- 05 Recoil Bruise
+// ---------------------------------------------------------------- 06 Recoil Bruise
 [QGVAR(bruiseEnabled), "CHECKBOX", [LSTRING(bruiseEnabled), LSTRING(bruiseEnabled_desc)], SUB_BRUISE, true, true] call CBA_fnc_addSetting;
 [QGVAR(bruiseChance), "SLIDER", [LSTRING(bruiseChance), LSTRING(bruiseChance_desc)], SUB_BRUISE, [0, 1, 0.1, 0, true], true] call CBA_fnc_addSetting;
-[QGVAR(bruiseDamage), "SLIDER", [LSTRING(bruiseDamage), LSTRING(bruiseDamage_desc)], SUB_BRUISE, [0.01, 0.34, 0.1, 2], true] call CBA_fnc_addSetting;
+[QGVAR(bruiseDamage), "SLIDER", [LSTRING(bruiseDamage), LSTRING(bruiseDamage_desc)], SUB_BRUISE, [0.1, 0.34, 0.15, 2], true] call CBA_fnc_addSetting;
 [QGVAR(bruiseCooldown), "SLIDER", [LSTRING(bruiseCooldown), LSTRING(bruiseCooldown_desc)], SUB_BRUISE, [0, 120, 15, 0], true] call CBA_fnc_addSetting;
 [QGVAR(bruiseRecoilScale), "CHECKBOX", [LSTRING(bruiseRecoilScale), LSTRING(bruiseRecoilScale_desc)], SUB_BRUISE, true, true] call CBA_fnc_addSetting;
 
-// ---------------------------------------------------------------- 06 Muzzle Flash Bloom
+// ---------------------------------------------------------------- 07 Muzzle Flash Bloom
 [QGVAR(flashEnabled), "CHECKBOX", [LSTRING(flashEnabled), LSTRING(flashEnabled_desc)], SUB_FLASH, true, true] call CBA_fnc_addSetting;
 [QGVAR(flashRequireMagnified), "CHECKBOX", [LSTRING(flashRequireMagnified), LSTRING(flashRequireMagnified_desc)], SUB_FLASH, true, true] call CBA_fnc_addSetting;
 [QGVAR(suppressorAudible), "SLIDER", [LSTRING(suppressorAudible), LSTRING(suppressorAudible_desc)], SUB_FLASH, [0.05, 1, 0.6, 2], true] call CBA_fnc_addSetting;
@@ -76,15 +89,16 @@
 [QGVAR(flashNearbyRange), "SLIDER", [LSTRING(flashNearbyRange), LSTRING(flashNearbyRange_desc)], SUB_FLASH, [2, 50, 15, 0], true] call CBA_fnc_addSetting;
 [QGVAR(flashNearbyScale), "SLIDER", [LSTRING(flashNearbyScale), LSTRING(flashNearbyScale_desc)], SUB_FLASH, [0, 1, 0.6, 0, true], true] call CBA_fnc_addSetting;
 
-// ---------------------------------------------------------------- 07 Monocular Reticle
+// ---------------------------------------------------------------- 08 Reticle
 [QGVAR(reticleEnabled), "CHECKBOX", [LSTRING(reticleEnabled), LSTRING(reticleEnabled_desc)], SUB_RETICLE, true, true] call CBA_fnc_addSetting;
+[QGVAR(reticleSideCopy), "CHECKBOX", [LSTRING(reticleSideCopy), LSTRING(reticleSideCopy_desc)], SUB_RETICLE, true, true] call CBA_fnc_addSetting;
 [QGVAR(reticleStyle), "LIST", [LSTRING(reticleStyle), LSTRING(reticleStyle_desc)], SUB_RETICLE, [[0, 1, 2, 3], [[LSTRING(reticleStyle_opt0)], [LSTRING(reticleStyle_opt1)], [LSTRING(reticleStyle_opt2)], [LSTRING(reticleStyle_opt3)]], 1], true] call CBA_fnc_addSetting;
 [QGVAR(reticleOffset), "SLIDER", [LSTRING(reticleOffset), LSTRING(reticleOffset_desc)], SUB_RETICLE, [0.05, 0.45, 0.22, 2], true] call CBA_fnc_addSetting;
 [QGVAR(reticleSize), "SLIDER", [LSTRING(reticleSize), LSTRING(reticleSize_desc)], SUB_RETICLE, [0.02, 0.4, 0.14, 2], false] call CBA_fnc_addSetting;
 [QGVAR(reticleOpacity), "SLIDER", [LSTRING(reticleOpacity), LSTRING(reticleOpacity_desc)], SUB_RETICLE, [0.1, 1, 0.8, 0, true], false] call CBA_fnc_addSetting;
 [QGVAR(reticleColor), "LIST", [LSTRING(reticleColor), LSTRING(reticleColor_desc)], SUB_RETICLE, [[0, 1, 2, 3], [[LSTRING(reticleColor_opt0)], [LSTRING(reticleColor_opt1)], [LSTRING(reticleColor_opt2)], [LSTRING(reticleColor_opt3)]], 0], false] call CBA_fnc_addSetting;
 
-// ---------------------------------------------------------------- 08 Classes
+// ---------------------------------------------------------------- 09 Classes
 [QGVAR(integratedWhitelist), "EDITBOX", [LSTRING(integratedWhitelist), LSTRING(integratedWhitelist_desc)], SUB_CLASSES, "", true] call CBA_fnc_addSetting;
 [QGVAR(integratedBlacklist), "EDITBOX", [LSTRING(integratedBlacklist), LSTRING(integratedBlacklist_desc)], SUB_CLASSES, "", true] call CBA_fnc_addSetting;
 [QGVAR(nvgMono), "EDITBOX", [LSTRING(nvgMono), LSTRING(nvgMono_desc)], SUB_CLASSES, "", true] call CBA_fnc_addSetting;
@@ -94,9 +108,10 @@
 [QGVAR(nvgImmune), "EDITBOX", [LSTRING(nvgImmune), LSTRING(nvgImmune_desc)], SUB_CLASSES, "", true] call CBA_fnc_addSetting;
 [QGVAR(suppressorWhitelist), "EDITBOX", [LSTRING(suppressorWhitelist), LSTRING(suppressorWhitelist_desc)], SUB_CLASSES, "", true] call CBA_fnc_addSetting;
 [QGVAR(suppressorBlacklist), "EDITBOX", [LSTRING(suppressorBlacklist), LSTRING(suppressorBlacklist_desc)], SUB_CLASSES, "", true] call CBA_fnc_addSetting;
+[QGVAR(maskCalibration), "EDITBOX", [LSTRING(maskCalibration), LSTRING(maskCalibration_desc)], SUB_CLASSES, "", true] call CBA_fnc_addSetting;
 [QGVAR(reticleMap), "EDITBOX", [LSTRING(reticleMap), LSTRING(reticleMap_desc)], SUB_CLASSES, "", true] call CBA_fnc_addSetting;
 
-// ---------------------------------------------------------------- 09 Debug
+// ---------------------------------------------------------------- 10 Debug
 [QGVAR(debugLog), "CHECKBOX", [LSTRING(debugLog), LSTRING(debugLog_desc)], SUB_DEBUG, false, true] call CBA_fnc_addSetting;
 [QGVAR(debugOverlay), "CHECKBOX", [LSTRING(debugOverlay), LSTRING(debugOverlay_desc)], SUB_DEBUG, false, false] call CBA_fnc_addSetting;
 
@@ -107,30 +122,40 @@ GVAR(settingMeta) = createHashMapFromArray [
     ["allowVehicles", ["CHECKBOX"]],
     ["magThreshold", ["SLIDER", 1, 8, 2, false]],
     ["autoDetectIntegrated", ["CHECKBOX"]],
+    ["pipEnabled", ["CHECKBOX"]],
+    ["pipResolution", ["LIST", [512, 1024, 2048], [LSTRING(pipResolution_opt0), LSTRING(pipResolution_opt1), LSTRING(pipResolution_opt2)]]],
+    ["pipForwardHip", ["SLIDER", 0, 0.6, 2, false]],
+    ["pipForwardAds", ["SLIDER", 0, 1.5, 2, false]],
+    ["pipFovScale", ["SLIDER", 0.8, 1.25, 3, false]],
     ["maskEnabled", ["CHECKBOX"]],
+    ["maskSource", ["LIST", [0, 1, 2, 3], [LSTRING(maskSource_opt0), LSTRING(maskSource_opt1), LSTRING(maskSource_opt2), LSTRING(maskSource_opt3)]]],
+    ["monoCustomMask", ["CHECKBOX"]],
+    ["opticModelScale", ["SLIDER", 2, 60, 2, false]],
+    ["maskOverHud", ["CHECKBOX"]],
     ["maskOpacity", ["SLIDER", 0.5, 1, 2, true]],
     ["maskScale", ["SLIDER", 0.6, 1.6, 2, false]],
     ["monoSide", ["LIST", [0, 1], [LSTRING(monoSide_opt0), LSTRING(monoSide_opt1)]]],
-    ["monoShift", ["SLIDER", 0, 0.35, 2, false]],
+    ["monoOtherEye", ["LIST", [0, 1], [LSTRING(monoOtherEye_opt0), LSTRING(monoOtherEye_opt1)]]],
+    ["monoShift", ["SLIDER", 0, 0.4, 2, false]],
     ["swayEnabled", ["CHECKBOX"]],
-    ["swayStrength", ["SLIDER", 0, 3, 2, false]],
-    ["swayLook", ["SLIDER", 0, 3, 2, false]],
-    ["swayMove", ["SLIDER", 0, 3, 2, false]],
-    ["swayIdle", ["SLIDER", 0, 3, 2, false]],
-    ["swayFatigue", ["SLIDER", 0, 3, 2, false]],
-    ["swayStiffness", ["SLIDER", 5, 60, 0, false]],
+    ["swayStrength", ["SLIDER", 0, 6, 2, false]],
+    ["swayLook", ["SLIDER", 0, 5, 2, false]],
+    ["swayMove", ["SLIDER", 0, 5, 2, false]],
+    ["swayIdle", ["SLIDER", 0, 5, 2, false]],
+    ["swayFatigue", ["SLIDER", 0, 5, 2, false]],
+    ["swayStiffness", ["SLIDER", 3, 60, 0, false]],
     ["swayDamping", ["SLIDER", 1, 20, 1, false]],
-    ["swayMaxOffset", ["SLIDER", 0.01, 0.2, 3, false]],
+    ["swayMaxOffset", ["SLIDER", 0.01, 0.4, 3, false]],
     ["aceMaskMode", ["LIST", [0, 1, 2], [LSTRING(aceMaskMode_opt0), LSTRING(aceMaskMode_opt1), LSTRING(aceMaskMode_opt2)]]],
     ["adsSwayEnabled", ["CHECKBOX"]],
-    ["adsSwayStrength", ["SLIDER", 0, 4, 2, false]],
-    ["recoilKick", ["SLIDER", 0, 4, 2, false]],
+    ["adsSwayStrength", ["SLIDER", 0, 8, 2, false]],
+    ["recoilKick", ["SLIDER", 0, 8, 2, false]],
     ["recoilCamShake", ["SLIDER", 0, 5, 1, false]],
     ["adsAimMult", ["SLIDER", 1, 3, 2, false]],
     ["misalignEnabled", ["CHECKBOX"]],
     ["misalignChance", ["SLIDER", 0, 1, 1, true]],
-    ["misalignStep", ["SLIDER", 0.002, 0.05, 3, false]],
-    ["misalignMax", ["SLIDER", 0.01, 0.15, 3, false]],
+    ["misalignStep", ["SLIDER", 0.002, 0.08, 3, false]],
+    ["misalignMax", ["SLIDER", 0.01, 0.3, 3, false]],
     ["misalignToggleReset", ["CHECKBOX"]],
     ["misalignAutoRecover", ["CHECKBOX"]],
     ["misalignRecoverDelay", ["SLIDER", 0, 30, 1, false]],
@@ -143,7 +168,7 @@ GVAR(settingMeta) = createHashMapFromArray [
     ["mountNotify", ["CHECKBOX"]],
     ["bruiseEnabled", ["CHECKBOX"]],
     ["bruiseChance", ["SLIDER", 0, 1, 0, true]],
-    ["bruiseDamage", ["SLIDER", 0.01, 0.34, 2, false]],
+    ["bruiseDamage", ["SLIDER", 0.1, 0.34, 2, false]],
     ["bruiseCooldown", ["SLIDER", 0, 120, 0, false]],
     ["bruiseRecoilScale", ["CHECKBOX"]],
     ["flashEnabled", ["CHECKBOX"]],
@@ -156,6 +181,7 @@ GVAR(settingMeta) = createHashMapFromArray [
     ["flashNearbyRange", ["SLIDER", 2, 50, 0, false]],
     ["flashNearbyScale", ["SLIDER", 0, 1, 0, true]],
     ["reticleEnabled", ["CHECKBOX"]],
+    ["reticleSideCopy", ["CHECKBOX"]],
     ["reticleStyle", ["LIST", [0, 1, 2, 3], [LSTRING(reticleStyle_opt0), LSTRING(reticleStyle_opt1), LSTRING(reticleStyle_opt2), LSTRING(reticleStyle_opt3)]]],
     ["reticleOffset", ["SLIDER", 0.05, 0.45, 2, false]],
     ["reticleSize", ["SLIDER", 0.02, 0.4, 2, false]],
@@ -170,6 +196,7 @@ GVAR(settingMeta) = createHashMapFromArray [
     ["nvgImmune", ["EDITBOX"]],
     ["suppressorWhitelist", ["EDITBOX"]],
     ["suppressorBlacklist", ["EDITBOX"]],
+    ["maskCalibration", ["EDITBOX"]],
     ["reticleMap", ["EDITBOX"]],
     ["debugLog", ["CHECKBOX"]],
     ["debugOverlay", ["CHECKBOX"]]
@@ -178,19 +205,21 @@ GVAR(settingMeta) = createHashMapFromArray [
 // Settings groups for the Zeus settings module: [title key, [names]]
 GVAR(settingGroups) = [
     [LSTRING(cat_general), ["enabled", "allowVehicles", "magThreshold", "autoDetectIntegrated"]],
-    [LSTRING(cat_mask), ["maskEnabled", "maskOpacity", "maskScale", "monoSide", "monoShift", "swayEnabled", "swayStrength", "swayLook", "swayMove", "swayIdle", "swayFatigue", "swayStiffness", "swayDamping", "swayMaxOffset", "aceMaskMode"]],
+    [LSTRING(cat_pip), ["pipEnabled", "pipResolution", "pipForwardHip", "pipForwardAds", "pipFovScale"]],
+    [LSTRING(cat_mask), ["maskEnabled", "maskSource", "monoCustomMask", "opticModelScale", "maskOverHud", "maskOpacity", "maskScale", "monoSide", "monoOtherEye", "monoShift", "swayEnabled", "swayStrength", "swayLook", "swayMove", "swayIdle", "swayFatigue", "swayStiffness", "swayDamping", "swayMaxOffset", "aceMaskMode"]],
     [LSTRING(cat_ads), ["adsSwayEnabled", "adsSwayStrength", "recoilKick", "recoilCamShake", "adsAimMult", "misalignEnabled", "misalignChance", "misalignStep", "misalignMax", "misalignToggleReset", "misalignAutoRecover", "misalignRecoverDelay", "misalignRecoverTime", "reseatAction", "reseatTime"]],
     [LSTRING(cat_mount), ["mountEnabled", "mountChance", "mountRecoilScale", "mountNotify"]],
     [LSTRING(cat_bruise), ["bruiseEnabled", "bruiseChance", "bruiseDamage", "bruiseCooldown", "bruiseRecoilScale"]],
     [LSTRING(cat_flash), ["flashEnabled", "flashRequireMagnified", "suppressorAudible", "flashIntensity", "flashDuration", "flashStack", "flashNearby", "flashNearbyRange", "flashNearbyScale"]],
-    [LSTRING(cat_reticle), ["reticleEnabled", "reticleStyle", "reticleOffset", "reticleSize", "reticleOpacity", "reticleColor"]],
-    [LSTRING(cat_classes), ["integratedWhitelist", "integratedBlacklist", "nvgMono", "nvgBino", "nvgQuad", "nvgIgnore", "nvgImmune", "suppressorWhitelist", "suppressorBlacklist", "reticleMap"]],
+    [LSTRING(cat_reticle), ["reticleEnabled", "reticleSideCopy", "reticleStyle", "reticleOffset", "reticleSize", "reticleOpacity", "reticleColor"]],
+    [LSTRING(cat_classes), ["integratedWhitelist", "integratedBlacklist", "nvgMono", "nvgBino", "nvgQuad", "nvgIgnore", "nvgImmune", "suppressorWhitelist", "suppressorBlacklist", "maskCalibration", "reticleMap"]],
     [LSTRING(cat_debug), ["debugLog", "debugOverlay"]]
 ];
 
 // Feature switches for the Zeus toggle module and setFeatureEnabled: [setting, label key]
 GVAR(featureSettings) = [
     ["enabled", LSTRING(feature_enabled)],
+    ["pipEnabled", LSTRING(feature_pipEnabled)],
     ["maskEnabled", LSTRING(feature_maskEnabled)],
     ["swayEnabled", LSTRING(feature_swayEnabled)],
     ["adsSwayEnabled", LSTRING(feature_adsSwayEnabled)],
