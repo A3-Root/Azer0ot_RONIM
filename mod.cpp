@@ -1,0 +1,10 @@
+name = "RONIM - Realistic Optic Nightvision Integration Mechanism";
+actionName = "GitHub";
+action = "https://github.com/A3-Root/Azer0ot_RONIM";
+description = "RONIM - Realistic Optic Nightvision Integration Mechanism";
+tooltip = "RONIM";
+tooltipOwned = "RONIM - Realistic Optic Nightvision Integration Mechanism";
+overview = "Realistic night vision through magnified optics: swaying NVG tube viewport, independent NVG sway and mount misalignment while aiming, mount failure, recoil bruising, muzzle flash bloom and monocular reticle. Fully configurable through CBA settings, Zeus and 3DEN modules.";
+author = "Root, Azer0";
+hidePicture = 0;
+hideName = 0;

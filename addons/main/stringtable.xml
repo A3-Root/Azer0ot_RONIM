@@ -1,0 +1,647 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project name="azeroot_ronim">
+    <Package name="main">
+        <Key ID="STR_azeroot_ronim_main_aceMaskMode">
+            <English>ACE NVG mask handling</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_aceMaskMode_desc">
+            <English>Only with ACE Nightvision loaded, which draws its own static tube mask.\nRONIM mask hides the ACE mask; ACE mask keeps ACE's and turns RONIM's off (no tube sway); Both draws both.</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_aceMaskMode_opt0">
+            <English>RONIM mask</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_aceMaskMode_opt1">
+            <English>ACE mask</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_aceMaskMode_opt2">
+            <English>Both</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_adsAimMult">
+            <English>Weapon sway multiplier</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_adsAimMult_desc">
+            <English>Weapon sway multiplier while aiming through a magnified optic with NVGs on (uses ACE sway factors with ACE).\n1.0 = no change, 1.5 = 50% more sway.</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_adsSwayEnabled">
+            <English>Independent ADS sway</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_adsSwayEnabled_desc">
+            <English>While aiming through a magnified optic with NVGs on, the tube sways on its own, out of step with the\nweapon, and recoil kicks it. Only while aiming through a magnified optic (above the General magnification threshold) with NVGs on.</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_adsSwayStrength">
+            <English>ADS sway strength</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_adsSwayStrength_desc">
+            <English>Size of the independent tube sway while aiming.\n2.0 = twice the movement, 0 = none.</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_allowVehicles">
+            <English>Apply in FFV seats</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_allowVehicles_desc">
+            <English>Also apply RONIM to players who can use their weapon from a vehicle seat (FFV, turned out).\nOff = only on foot.</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_attr_exempt">
+            <English>RONIM: exempt</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_attr_exempt_desc">
+            <English>This unit gets no RONIM night vision effects.</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_autoDetectIntegrated">
+            <English>Auto-detect integrated NV optics</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_autoDetectIntegrated_desc">
+            <English>Optics whose own vision modes include NVG or thermal never get the optic features.\nOff = only the Classes &gt; Integrated NV optics list counts.</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_bruiseChance">
+            <English>Bruise chance per shot</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_bruiseChance_desc">
+            <English>Chance that one shot bruises you (outside the cooldown).</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_bruiseCooldown">
+            <English>Bruise cooldown</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_bruiseCooldown_desc">
+            <English>Minimum seconds between two bruises.</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_bruiseDamage">
+            <English>Bruise damage</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_bruiseDamage_desc">
+            <English>Damage of one bruise. ACE: below 0.35 gives a contusion.</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_bruiseEnabled">
+            <English>Recoil bruising</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_bruiseEnabled_desc">
+            <English>Shots can knock the NVG into your face and bruise your head (ACE medical: contusion). Only while aiming through a magnified optic (above the General magnification threshold) with NVGs on.</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_bruiseRecoilScale">
+            <English>Scale with recoil</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_bruiseRecoilScale_desc">
+            <English>Powerful rounds bruise more often and harder.</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_cat">
+            <English>RONIM - Optic Nightvision</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_cat_ads">
+            <English>03 ADS Sway and Misalignment</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_cat_bruise">
+            <English>05 Recoil Bruise</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_cat_classes">
+            <English>08 Classes</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_cat_debug">
+            <English>09 Debug</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_cat_flash">
+            <English>06 Muzzle Flash Bloom</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_cat_general">
+            <English>01 General</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_cat_mask">
+            <English>02 Tube Mask and Sway</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_cat_mount">
+            <English>04 Mount Failure</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_cat_reticle">
+            <English>07 Monocular Reticle</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_category">
+            <English>RONIM</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_clearOverrides">
+            <English>Clear these overrides</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_clearOverrides_desc">
+            <English>Return every setting in this group to its CBA value instead of applying.</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_debugLog">
+            <English>RPT logging</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_debugLog_desc">
+            <English>Write RONIM events (mount failures, bruises, overrides) to the RPT log.</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_debugOverlay">
+            <English>Debug overlay</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_debugOverlay_desc">
+            <English>Show RONIM's current state on screen (local player).</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_eden_exempt">
+            <English>RONIM Exempt Units</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_eden_exempt_desc">
+            <English>Synced units (or all units of synced groups) are exempt from every RONIM effect.</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_eden_exempt_value">
+            <English>Exempt</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_eden_exempt_value_desc">
+            <English>On = exempt, Off = remove an exemption.</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_eden_settings">
+            <English>RONIM Settings</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_eden_settings_desc">
+            <English>Mission-wide overrides of RONIM's CBA settings. Keep setting leaves a value alone.</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_enabled">
+            <English>Enable RONIM</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_enabled_desc">
+            <English>Master switch for every RONIM effect.\nOff = vanilla night vision.</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_feature_adsSwayEnabled">
+            <English>ADS sway</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_feature_bruiseEnabled">
+            <English>Recoil bruise</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_feature_enabled">
+            <English>RONIM (all)</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_feature_flashEnabled">
+            <English>Flash bloom</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_feature_maskEnabled">
+            <English>Tube mask</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_feature_misalignEnabled">
+            <English>Misalignment</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_feature_mountEnabled">
+            <English>Mount failure</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_feature_reticleEnabled">
+            <English>Monocular reticle</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_feature_swayEnabled">
+            <English>Tube sway</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_featuresTitle">
+            <English>RONIM features (Keep = CBA setting)</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_flashDuration">
+            <English>Bloom duration</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_flashDuration_desc">
+            <English>Seconds the bloom takes to fade.</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_flashEnabled">
+            <English>Muzzle flash bloom</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_flashEnabled_desc">
+            <English>Firing without a suppressor washes the NVG image out white for a moment.</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_flashIntensity">
+            <English>Bloom intensity</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_flashIntensity_desc">
+            <English>How white the image gets on a shot.</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_flashNearby">
+            <English>Nearby shooters</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_flashNearbyRange">
+            <English>Nearby range</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_flashNearbyRange_desc">
+            <English>Distance in metres within which other shooters cause bloom. Fades with distance.</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_flashNearbyScale">
+            <English>Nearby intensity</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_flashNearbyScale_desc">
+            <English>Bloom from another shooter at point blank, relative to your own shot.</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_flashNearby_desc">
+            <English>Unsuppressed shots from other units close to you and in view also bloom your NVGs.</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_flashRequireMagnified">
+            <English>Only through magnified optics</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_flashRequireMagnified_desc">
+            <English>Bloom only while aiming through a magnified optic.\nOff = any shot with NVGs on.</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_flashStack">
+            <English>Follow-up shot bloom</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_flashStack_desc">
+            <English>Share of full bloom that a shot adds while the previous bloom is still fading (automatic fire).</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_integratedBlacklist">
+            <English>Never integrated</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_integratedBlacklist_desc">
+            <English>Optics never treated as integrated NV, even if auto-detection says so.\nComma separated classnames, case insensitive.</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_integratedWhitelist">
+            <English>Integrated NV optics</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_integratedWhitelist_desc">
+            <English>Optics (or weapons with built-in optics) treated as having their own night vision: no optic features.\nComma separated classnames, case insensitive.</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_keep">
+            <English>Keep setting</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_magThreshold">
+            <English>Magnification threshold</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_magThreshold_desc">
+            <English>Zoom at or above which an optic counts as magnified. Optic features (mount failure, bruise, ADS sway,\nmisalignment, flash bloom, monocular reticle) need this. Iron sights and holo sights sit around 1.0-1.3x.</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_maskEnabled">
+            <English>Draw NVG tube mask</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_maskEnabled_desc">
+            <English>Black out everything outside the NVG tube(s) while NVGs are on.\nOff = full screen night vision (sway then has nothing to move).</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_maskOpacity">
+            <English>Mask opacity</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_maskOpacity_desc">
+            <English>How dark the area outside the tubes is.\nLower = you can see a little around the tubes.</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_maskScale">
+            <English>Tube size</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_maskScale_desc">
+            <English>Size of the tube view.\nHigher = larger tubes, less blacked out.</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_misalignAutoRecover">
+            <English>Auto recover</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_misalignAutoRecover_desc">
+            <English>The mount settles back by itself after you stop shooting.</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_misalignChance">
+            <English>Misalignment chance per shot</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_misalignChance_desc">
+            <English>Chance that one shot shifts the mount. Scales with the round's power.</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_misalignEnabled">
+            <English>Mount misalignment</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_misalignEnabled_desc">
+            <English>Shots can shift the NVG mount so the tube sits off centre until it recovers or is re-seated. Only while aiming through a magnified optic (above the General magnification threshold) with NVGs on.</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_misalignMax">
+            <English>Max misalignment</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_misalignMax_desc">
+            <English>Furthest the mount can end up off centre, as a fraction of screen height.</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_misalignRecoverDelay">
+            <English>Auto recover delay</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_misalignRecoverDelay_desc">
+            <English>Seconds without firing before the mount starts settling back.</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_misalignRecoverTime">
+            <English>Auto recover time</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_misalignRecoverTime_desc">
+            <English>Seconds the mount takes to settle fully back once it starts.</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_misalignStep">
+            <English>Misalignment per shift</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_misalignStep_desc">
+            <English>How far one shift moves the tube, as a fraction of screen height.</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_misalignToggleReset">
+            <English>NVG toggle re-seats</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_misalignToggleReset_desc">
+            <English>Turning the NVGs off and on again clears the misalignment.</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_monoShift">
+            <English>Monocular tube shift</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_monoShift_desc">
+            <English>How far a monocular tube sits off centre, as a fraction of screen width.\n0 = centred.</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_monoSide">
+            <English>Monocular eye</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_monoSide_desc">
+            <English>Which eye a monocular NVG sits in front of. The monocular reticle appears on the other side.</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_monoSide_opt0">
+            <English>Left eye (reticle right)</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_monoSide_opt1">
+            <English>Right eye (reticle left)</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_mountBrokenHint">
+            <English>Your NVG mount broke - the goggles fell off.</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_mountChance">
+            <English>Failure chance per shot</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_mountChance_desc">
+            <English>Chance that one shot breaks the mount.</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_mountEnabled">
+            <English>Mount failure</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_mountEnabled_desc">
+            <English>Shots can break the NVG mount so the goggles fall to the ground. Only while aiming through a magnified optic (above the General magnification threshold) with NVGs on.</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_mountNotify">
+            <English>Notify player</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_mountNotify_desc">
+            <English>Show a hint when your NVGs fall off.</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_mountRecoilScale">
+            <English>Scale with recoil</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_mountRecoilScale_desc">
+            <English>Powerful rounds (7.62, .338, .50) break mounts more often than 5.56 or pistol rounds.</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_msgApplied">
+            <English>RONIM overrides applied</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_msgBroken">
+            <English>NVG mount broken</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_msgCleared">
+            <English>RONIM overrides cleared</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_msgExemptOff">
+            <English>Unit no longer exempt</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_msgExemptOn">
+            <English>Unit exempt from RONIM</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_msgFeatures">
+            <English>RONIM features updated</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_msgNeedUnit">
+            <English>Place the module on a unit</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_msgNoNvg">
+            <English>Unit has no NVGs</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_msgOptics">
+            <English>Integrated NV optics updated</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_msgReseated">
+            <English>NVG mount re-seated</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_nvgBino">
+            <English>Binocular NVGs</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_nvgBino_desc">
+            <English>NVG classes forced to two tubes.\nComma separated classnames, case insensitive.</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_nvgIgnore">
+            <English>Ignored NVGs</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_nvgIgnore_desc">
+            <English>NVG / HMD classes RONIM leaves alone entirely (no mask, no features).\nComma separated classnames, case insensitive.</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_nvgImmune">
+            <English>Unbreakable mounts</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_nvgImmune_desc">
+            <English>NVG classes that never fall off (mount failure).\nComma separated classnames, case insensitive.</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_nvgMono">
+            <English>Monocular NVGs</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_nvgMono_desc">
+            <English>NVG classes forced to one tube.\nComma separated classnames, case insensitive.</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_nvgQuad">
+            <English>Panoramic (quad) NVGs</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_nvgQuad_desc">
+            <English>NVG classes forced to four tubes.\nComma separated classnames, case insensitive.</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_off">
+            <English>Off</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_on">
+            <English>On</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_opticsAdd">
+            <English>Add classes</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_opticsAdd_desc">
+            <English>Comma separated optic classes to treat as integrated NV.</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_opticsCurrent">
+            <English>Use the unit's current optic</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_opticsCurrent_desc">
+            <English>Module placed on a unit: add the optic on its current weapon.</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_opticsRemove">
+            <English>Remove classes</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_opticsRemove_desc">
+            <English>Comma separated optic classes to remove again.</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_pickCategory">
+            <English>Settings group</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_recoilCamShake">
+            <English>Recoil camera shake</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_recoilCamShake_desc">
+            <English>Extra camera shake per shot while aiming with NVGs.\n0 = off.</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_recoilKick">
+            <English>Recoil kick</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_recoilKick_desc">
+            <English>How hard each shot knocks the tube. Scales with the round's power.</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_reseat">
+            <English>Re-seat NVG mount</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_reseatAction">
+            <English>ACE re-seat action</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_reseatAction_desc">
+            <English>Only with ACE: self-interaction &gt; Equipment &gt; Re-seat NVG mount, shown while misaligned.</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_reseatTime">
+            <English>Re-seat time</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_reseatTime_desc">
+            <English>Seconds the ACE re-seat action takes.</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_reseated">
+            <English>NVG mount re-seated.</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_reseating">
+            <English>Re-seating NVG mount...</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_reticleColor">
+            <English>Reticle colour</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_reticleColor_desc">
+            <English>Colour of the reticle copy.</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_reticleColor_opt0">
+            <English>Red</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_reticleColor_opt1">
+            <English>Green</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_reticleColor_opt2">
+            <English>Amber</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_reticleColor_opt3">
+            <English>Black</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_reticleEnabled">
+            <English>Monocular reticle</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_reticleEnabled_desc">
+            <English>With a monocular NVG, the naked eye still sees the scope: a copy of the reticle is drawn on the side\nwithout the tube. Only while aiming through a magnified optic (above the General magnification threshold) with NVGs on.</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_reticleMap">
+            <English>Reticle per optic</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_reticleMap_desc">
+            <English>Monocular reticle per optic as class:style pairs, styles dot, cross, chevron, mildot.\nExample: optic_Hamr:chevron, optic_Arco:chevron, optic_MRCO:dot</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_reticleOffset">
+            <English>Reticle offset</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_reticleOffset_desc">
+            <English>Horizontal distance from screen centre, as a fraction of screen width.</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_reticleOpacity">
+            <English>Reticle opacity</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_reticleOpacity_desc">
+            <English>How visible the reticle copy is.</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_reticleSize">
+            <English>Reticle size</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_reticleSize_desc">
+            <English>Reticle size as a fraction of screen height.</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_reticleStyle">
+            <English>Default reticle</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_reticleStyle_desc">
+            <English>Reticle drawn when the optic has no entry in Classes &gt; Reticle per optic.</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_reticleStyle_opt0">
+            <English>Dot</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_reticleStyle_opt1">
+            <English>Cross</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_reticleStyle_opt2">
+            <English>Chevron</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_reticleStyle_opt3">
+            <English>Mil-dot</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_suppressorAudible">
+            <English>Suppressor detection</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_suppressorAudible_desc">
+            <English>Muzzle attachments that cut sound below this value count as suppressors. Flash hiders and brakes do not.\nClasses &gt; suppressor lists override this.</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_suppressorBlacklist">
+            <English>Never suppressor</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_suppressorBlacklist_desc">
+            <English>Muzzle attachments never counted as suppressors (bloom).\nComma separated classnames, case insensitive.</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_suppressorWhitelist">
+            <English>Always suppressor</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_suppressorWhitelist_desc">
+            <English>Muzzle attachments always counted as suppressors (no bloom).\nComma separated classnames, case insensitive.</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_swayDamping">
+            <English>Mount damping</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_swayDamping_desc">
+            <English>How quickly wobbles die out.\nHigher = settles fast. Lower = keeps bouncing.</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_swayEnabled">
+            <English>Tube sway</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_swayEnabled_desc">
+            <English>The tube view lags and bobs with head movement, walking and fatigue.\nOff = tube fixed to the screen centre.</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_swayFatigue">
+            <English>Fatigue effect</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_swayFatigue_desc">
+            <English>Extra drift when tired.\n0 = fatigue has no effect.</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_swayIdle">
+            <English>Idle drift</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_swayIdle_desc">
+            <English>Slow drift while standing still.</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_swayLook">
+            <English>Head turn lag</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_swayLook_desc">
+            <English>How much the tube lags behind when you turn your head.</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_swayMaxOffset">
+            <English>Max sway offset</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_swayMaxOffset_desc">
+            <English>Furthest the tube may sway from centre, as a fraction of screen height.</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_swayMove">
+            <English>Walking bob</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_swayMove_desc">
+            <English>How much the tube bobs while moving. Scales with speed, less when crouched or prone.</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_swayStiffness">
+            <English>Mount stiffness</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_swayStiffness_desc">
+            <English>How firmly the mount pulls the tube back to centre.\nHigher = snappier, smaller swings. Lower = looser, wobblier.</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_swayStrength">
+            <English>Sway strength</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_swayStrength_desc">
+            <English>Overall multiplier for all tube sway.\n2.0 = twice the movement, 0.5 = half.</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_zeus_breakMount">
+            <English>Break NVG Mount</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_zeus_exempt">
+            <English>Toggle Exempt</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_zeus_features">
+            <English>Toggle Features</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_zeus_optics">
+            <English>Integrated NV Optics</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_zeus_reseat">
+            <English>Re-seat NVG Mount</English>
+        </Key>
+        <Key ID="STR_azeroot_ronim_main_zeus_settings">
+            <English>RONIM Settings</English>
+        </Key>
+    </Package>
+</Project>

@@ -1,0 +1,50 @@
+name = "RONIM - Realistic Optic Nightvision Integration Mechanism"
+author = "Root, Azer0"
+prefix = "azeroot_ronim"
+mainprefix = "z"
+
+[files]
+include = [
+    "mod.cpp",
+    "meta.cpp",
+    "LICENSE",
+    "README*.md",
+]
+exclude = [
+    ".gitignore",
+    ".editorconfig",
+    "*.md",
+    "*.json",
+    "*.txt",
+]
+
+[properties]
+author = "Root, Azer0"
+url = "https://github.com/A3-Root/Azer0ot_RONIM"
+
+[lints.sqf.banned_commands]
+options.banned = [
+    "execVM",
+]
+
+[config.config_this_call]
+enabled = true
+
+[sqf.undefined]
+enabled = true
+options.check_orphan_code = true
+
+[sqf.if_not_else]
+enabled = true
+
+[sqf.shadowed]
+enabled = true
+
+[sqf.not_private]
+enabled = true
+
+[sqf.short_circuit_bool_var]
+enabled = true
+
+[version]
+git_hash = 0
