@@ -64,3 +64,11 @@ build/.env
 
 # RONIM generator cache
 tools/.cache/
+
+# AI agent files
+CLAUDE.md
+CLAUDE.md.bak
+AGENTS.md
+.claude/
+.codex/
+.agents/
